@@ -1,0 +1,69 @@
+body{
+margin:0 auto;
+text-align:center;
+font-family:Arial, sans-serif;
+background:#f7f7f7;
+}
+/*img{
+  background:url("cutedwood01.jpg");
+  width:45px;
+  height:50px;
+  position:absolute;
+  border:1px solid black;
+}*/
+img{
+  width:46px;
+  height:53px;
+
+}
+.my img{
+  filter:drop-shadow(3px 3px rgba(0,0,0,0.6));
+}
+.teki img{
+  transform:rotateX(180deg);
+  filter:drop-shadow(3px -3px rgba(0,0,0,0.5));
+}
+.teki{
+  /*transform:rotateX(180deg); これがあれば駒を逆に出来る！*/
+}
+#container{
+  background:url("backimg/wood01.jpg");
+  width:464px;
+  height:527px;
+  margin-left:50px;
+  position:relative;
+
+  /*height, widthともに50px余り*/
+}
+.koma{
+  width: 46px;
+  height: 53px;
+  background: url("backimg/cutedwood01.jpg");
+  /*background:#FFFFCC;*/
+  position:absolute;/*これを入れる親要素はposition:relativeにすること。*/
+  /*left:25px;*/
+  /*top:25px; 25ずつ移動させることで空きができるはず! と思っていたん
+  だけどこれは勘違い。
+  javascriptでtop leftを決定してしまうのでリセットされていた。
+  */
+  border:1px solid black;
+}
+.koma:hover{
+  background:#fbd92d;
+}
+#btn{
+  width:180px;
+  height:30px;
+  line-height:30px;
+  background:lightgreen;
+  border-radius:5px;
+  text-align:center;
+  margin:20px 50px;
+  cursor:pointer;
+}
+#btn:hover{
+  opacity:0.8;
+}
+.red{
+  background:red;
+}
