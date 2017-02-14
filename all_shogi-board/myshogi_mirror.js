@@ -1,3 +1,5 @@
+//実験中なのでまだ使いません。
+
   ban = document.getElementById("ban");
   sente_komadai = document.getElementById("sente_komadai");
   gote_komadai = document.getElementById("gote_komadai");
