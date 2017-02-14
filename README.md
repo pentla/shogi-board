@@ -1,5 +1,4 @@
 # shogi-board
-<style> body{font-size:14px;}</style>
 対戦型の将棋盤です。
 
 初めて自分で組んだプログラムになります。言語はjavascriptです。
