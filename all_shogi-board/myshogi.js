@@ -208,7 +208,7 @@
     }
     //todo:ifの階層を１段階減らしたい。
 
-    //持ち駒の数
+    //持ち駒の数:次は配列として処理したい。
     var senteMotigoma = 0;
     var goteMotigoma = 0;
 
@@ -226,6 +226,7 @@
         komadai_appendChild(goteKomadai,betrayKoma,goteMotigoma);
         goteMotigoma++;
       }
+      sort_komadai();
     };
 
     function komadai_appendChild(who_komadai ,betrayKoma ,who_motigoma){
@@ -263,6 +264,9 @@
       });
       who_komadai.appendChild(c);
     }
+    sort_komadai = function(){
+      //配列で取得、ソートして小さい順に並べ換える。その後でappendchild
+    }
 
     function reset_komadai(){
       while(goteKomadai.firstChild){
@@ -275,17 +279,12 @@
       goteMotigoma = 0;
     }
 
-    //盤、駒台のリセットボタン
-    let passBtn = document.getElementById('btn');
-    // resetBtn.addEventListener('click' , function(){
-    //   initialize_board(board81);
-    //   write_board(line_koma(koma,board81));
-    //   reset_komadai();
-    // });
-    passBtn.addEventListener('click' , function(){
-      sente = !sente;
-      if(selected){selected = false;}
+    盤、駒台のリセットボタン
+    resetBtn = document.getElementById("btn")
+    resetBtn.addEventListener('click' , function(){
+      initialize_board(board81);
       write_board(line_koma(koma,board81));
+      reset_komadai();
     });
 
 })();

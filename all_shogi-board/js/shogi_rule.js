@@ -106,6 +106,23 @@ function shogi_rule(koma,board81,afterX,afterY){
     return true;
   }//block_jump_y
 
+  //block_jump_xy
+  //if()もし斜め上に行くなら、斜め下に行くなら...を判定し、
+  //その通り道に駒があるかどうかcheck|(beforex-afterx)|-1回for文で判定したい
+  block_jump_xy = function(){
+    if(afterX - beforeX > 0 ){ //右側に進んでいる場合
+     if(afterY - beforeY > 0){
+
+     }else{
+
+     }
+     if(afterY - beforeY > 0){
+
+     }else{
+
+     }
+    }
+  }
   //これロジックが間違ってるので作り直し
   // let block_jump_xy = function(){
   //   let count = Math.abs(beforeX - afterX) - 1;
@@ -174,8 +191,8 @@ function shogi_rule(koma,board81,afterX,afterY){
     }
     case koma.KAKU:
     case koma.KAKU_:{
-      //ロジックが難しい
       let a = beforeX - afterX;
+      //block_jump_xyが出たら差し替え。
       // if(((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
       if((a === beforeY - afterY) || (a === afterY - beforeY)){
       promote();
@@ -222,17 +239,15 @@ function shogi_rule(koma,board81,afterX,afterY){
       } else {return false;}
     }
     default:{
-      error("koma is not resistered");
+      console.log("koma is not resistered");
       break;
     }
   }//switch
   return true;//この文がないとバグ必須。
 }
 
-  //
   function put_motigoma_rule(koma,board81,afterX,afterY){
     let holdingKoma = recordedMotigoma.type;
-
     function nifu_check(anyoneFu){
       for(i = 1;i <= 9;i++){
         if(board81[afterX][i] === anyoneFu){
@@ -241,6 +256,7 @@ function shogi_rule(koma,board81,afterX,afterY){
       }
       return true;
     }
+    //歩や香車は１段目、桂馬は１、２段目に置くことができない。
     switch(holdingKoma){
       case koma.FU:{
         if((afterY !== 1) && nifu_check(koma.FU)) {

@@ -10,13 +10,14 @@
       this.teban = true;
       this.senteKomadai = document.getElementById("senteKomadai")
     }
+    //クラス内変数として@@でboard81、sentekomadai,gotekomadaiを管理したい
   }
   class koma {
     constructor(type){
       this.type = type;
       // this.number = number;
       this.selected = false;
-      this.picture = document.getElementByid("type");
+      this.picture = document.getElementByid(type);
     }
     get type(){
       return this._type;
@@ -28,9 +29,9 @@
   koma.prototype.FU_promote(){
     return TO;
   }
-  let EMPTY = new koma(empty),
-      FU = new koma(fu),
-      KYO = new koma(kyo);
+  let EMPTY = new koma("empty"),
+      FU = new koma("fu"),
+      KYO = new koma("kyo");
 
   let virtualBan = [];
   function make_virtualBan(){
