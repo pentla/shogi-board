@@ -29,8 +29,8 @@ function line_koma(koma,board81){
   board81[7][1] = koma.GIN_;
   board81[6][1] = koma.KIN_;
   board81[4][1] = koma.KIN_;
-  board81[8][2] = koma.KAKU_;
-  board81[2][2] = koma.HI_;
+  board81[2][2] = koma.KAKU_;
+  board81[8][2] = koma.HI_;
   board81[5][1] = koma.GYOKU_;
 
   //この行なくても動くからいらないのかな？

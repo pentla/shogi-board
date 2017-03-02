@@ -109,42 +109,50 @@ function shogi_rule(koma,board81,afterX,afterY){
   //block_jump_xy
   //if()もし斜め上に行くなら、斜め下に行くなら...を判定し、
   //その通り道に駒があるかどうかcheck|(beforex-afterx)|-1回for文で判定したい
-  block_jump_xy = function(){
-    if(afterX - beforeX > 0 ){ //右側に進んでいる場合
-     if(afterY - beforeY > 0){
-
-     }else{
-
+  let block_jump_xy = function(){
+    let count = Math.abs(beforeX - afterX) - 1;
+    if(afterX - beforeX > 0 ){ //左側に進んでいる場合
+     if(afterY - beforeY > 0){ //下側に進んでいる場合
+       console.log("leftdown");
+       for(let i = 1;count > 0;count--,i++){
+         if(board81[beforeX + i][beforeY + i] !== koma.EMPTY){
+           console.log("not xyjump");
+           return false;
+         }
+       }
+     }else{//上側に進んでいる場合
+       console.log("leftup");
+       for(let i = 1;count > 0;count--,i++){
+         if(board81[beforeX + i][beforeY - i] !== koma.EMPTY){
+           console.log("not xyjump");
+           return false;
+         }
+       }
      }
-     if(afterY - beforeY > 0){
-
-     }else{
-
+   }
+     if(afterX - beforeX < 0){   //右側に進んでいる場合
+       if(afterY - beforeY > 0){ //下側に進んでいる場合
+         console.log("rightdown");
+         for(let i = 1;count > 0;count--,i++){
+           if(board81[beforeX - i][beforeY + i] !== koma.EMPTY){
+             console.log("not xyjump");
+             return false;
+           }
+         }
+       }else{//上側に進んでいる場合
+         console.log("rightup");
+         console.log(board81[7][7]);
+         for(let i = 1;count > 0;count--,i++){
+           if(board81[beforeX - i][beforeY - i] !== koma.EMPTY){
+             console.log("not xyjump");
+             return false;
+           }
+         }
+       }
      }
-    }
+    console.log("xy true");
+    return true;
   }
-  //これロジックが間違ってるので作り直し
-  // let block_jump_xy = function(){
-  //   let count = Math.abs(beforeX - afterX) - 1;
-  //   if(beforeX > afterX){//角が右に行く場合、右上と右下をチェック
-  //     for(let i = 1; count > 0; count--,i++){
-  //       if(((board81[beforeX - i][beforeY - i]) !== koma.EMPTY)||
-  //         ((board81[beforeX - i][beforeY + i]) !== koma.EMPTY)){
-  //           console.log("not xyjump");
-  //           return false;
-  //       }
-  //     }
-  //   }else{//左に行く場合、左上と左下をチェック
-  //     for(let i = 1; count > 0; count--,i++){
-  //       if(((board81[afterX - i][afterY - i]) !== koma.EMPTY)||
-  //          ((board81[afterX - i][afterY + i]) !== koma.EMPTY)){
-  //           console.log("not xyjump");
-  //           return false;
-  //       }
-  //     }
-  //     return true;
-  //   }
-  // }//block_jump_xy
   console.log(recorded.type);
 
   switch(recorded.type){
@@ -189,16 +197,26 @@ function shogi_rule(koma,board81,afterX,afterY){
         break;
       } else {return false;}
     }
+    case koma.RYU:
+    case koma.RYU_:{
+      if((straight() || leftup() || left() || leftdown() || rightup() || right() || rightdown() || goback() || (beforeX === afterX) || (beforeY === afterY) ) && (block_jump_y()) && (block_jump_x())){
+        break;
+      } else{ return false;}
+    }
     case koma.KAKU:
     case koma.KAKU_:{
       let a = beforeX - afterX;
       //block_jump_xyが出たら差し替え。
-      // if(((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
-      if((a === beforeY - afterY) || (a === afterY - beforeY)){
+      if(((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
+      // if((a === beforeY - afterY) || (a === afterY - beforeY)){
       promote();
       break;
     } else {return false;}
   }
+    case koma.UMA:
+    case koma.UMA_:{
+
+    }
     case koma.GYOKU:
     case koma.GYOKU_:{
       if(straight() || leftup() || left() || leftdown() || rightup() || right() || rightdown() || goback()){

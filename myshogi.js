@@ -251,6 +251,7 @@
       c.addEventListener('click' , function(){
         if(thenTeban !== sente)return;
         if(motigoma){
+          console.log("cancel motigoma");
           c.style.background = 'none';
           motigoma = false;
           selected = false;
@@ -279,8 +280,8 @@
       goteMotigoma = 0;
     }
 
-    盤、駒台のリセットボタン
-    resetBtn = document.getElementById("btn")
+    //盤、駒台のリセットボタン
+    resetBtn = document.getElementById("btn");
     resetBtn.addEventListener('click' , function(){
       initialize_board(board81);
       write_board(line_koma(koma,board81));
