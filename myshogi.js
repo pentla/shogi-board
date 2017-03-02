@@ -8,8 +8,6 @@
     //sente , board81[x][y] , motigoma
     //駒を打った時の駒台の整理
 
-    //ものごとに
-
     //マスを数値化する。
     //0 何もないマス。 1 ~ 14 先手の駒。  15 ~ 28 後手の駒。
     var KomaName = function(){
@@ -34,6 +32,7 @@
       this.KAKU  =         12;
       this.UMA   =         13;
       this.GYOKU =         14;
+
       this.FU_   =         15;
       this.TO_   =         16;
       this.KYO_  =         17;
@@ -99,8 +98,8 @@
       }
     }
 
-    //cに駒の画像を入れ、htmlに表示。
-    function write_board(){
+    //駒の画像をhtmlに表示。
+    function write_board_to_html(){
       let tmpDocumentFragment = document.createDocumentFragment();
       initialize_ban();
       for( let y = 1; y <= 9 ; y++){
@@ -116,7 +115,7 @@
       }
       ban.appendChild(tmpDocumentFragment);
     };
-    write_board(line_koma(koma,board81));
+    write_board_to_html(line_koma(koma,board81));
     //todo:cの代わりにboard81[x][y]を使ってコード短くできないか？
 
 
@@ -129,31 +128,27 @@
     }
     function select_or_move_koma(x, y, c){
       c.addEventListener('click' , function(){
-        let selectingKomaType = board81[x][y];
-
+        let selectingKomaName = board81[x][y];
         if(!selected){
           //駒が選択されていないなら
          //空白のマスは動かせない。相手の駒も動かせない。
-         if(selectingKomaType === koma.EMPTY) return;
+         if(selectingKomaName === koma.EMPTY) return;
          if(sente){
-            if(selectingKomaType >= koma.goteMin)
+            if(selectingKomaName >= koma.goteMin)
             return;
           }else{
-            if(selectingKomaType <= koma.senteMax)
+            if(selectingKomaName <= koma.senteMax)
             return;
           }
           //選択した駒を記録して、色を赤にする。
           c.style.background = 'red';
           console.log("red");
-          recorded = new RecordKoma(x, y, selectingKomaType,undefined);
+          recorded = new RecordKoma(x, y, selectingKomaName,undefined);
           //グローバル変数で定義しているのでバグでるかも
           selected = true;
-
-        }else if(!motigoma){
-            //駒を移動させるなら
-
+        }else if(!motigoma){//駒を移動させるなら
             //同じ場所をクリックするなら行動キャンセル。
-            if(selectingKomaType === board81[recorded.x][recorded.y]){
+            if(selectingKomaName === board81[recorded.x][recorded.y]){
               selected = false;
               c.style.background = "none";
               return;
@@ -165,8 +160,8 @@
             }
             //移動場所に駒がいたら駒台へ。
             //todo:相手の駒に限定させないとバグの元になる。
-            if(selectingKomaType !== koma.EMPTY) {
-              put_to_komadai(selectingKomaType);
+            if(selectingKomaName !== koma.EMPTY) {
+              put_to_komadai(selectingKomaName);
             }
             //先ほど記録した駒を移動
             //ここのboard81[x][y]は変数の使用禁止
@@ -174,11 +169,8 @@
             board81[recorded.x][recorded.y] = koma.EMPTY;
             selected = false;
             sente = !sente;
-            write_board();
-        }else if(motigoma){
-            //持ち駒を掴んでいるなら
-
-            //持ち駒のルールに添わなければ進めません。
+            write_board_to_html();
+        }else if(motigoma){//持ち駒を掴んでいるなら。
             if(!put_motigoma_rule(koma,board81,x,y)){
                 console.log("cant put motigoma");
                 recordedMotigoma.removeInfo.background = "none";
@@ -187,7 +179,7 @@
             }
 
             //駒がある場所に打つことはできない。
-            if(selectingKomaType !== koma.EMPTY){return;}
+            if(selectingKomaName !== koma.EMPTY){return;}
             //持ち駒を打って、駒台から持ち駒を消す。
             board81[x][y] = recordedMotigoma.type;
             if(sente){
@@ -201,7 +193,7 @@
             motigoma = false;
             selected = false;
             sente = !sente;
-            write_board();
+            write_board_to_html();
             //打った持ち駒を盤に表示させるためもう一度表示。
         }
       });
@@ -226,7 +218,6 @@
         komadai_appendChild(goteKomadai,betrayKoma,goteMotigoma);
         goteMotigoma++;
       }
-      sort_komadai();
     };
 
     function komadai_appendChild(who_komadai ,betrayKoma ,who_motigoma){
@@ -265,9 +256,6 @@
       });
       who_komadai.appendChild(c);
     }
-    sort_komadai = function(){
-      //配列で取得、ソートして小さい順に並べ換える。その後でappendchild
-    }
 
     function reset_komadai(){
       while(goteKomadai.firstChild){
@@ -284,7 +272,7 @@
     resetBtn = document.getElementById("btn");
     resetBtn.addEventListener('click' , function(){
       initialize_board(board81);
-      write_board(line_koma(koma,board81));
+      write_board_to_html(line_koma(koma,board81));
       reset_komadai();
     });
 

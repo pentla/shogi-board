@@ -85,6 +85,7 @@ function shogi_rule(koma,board81,afterX,afterY){
     }
     return true;
   }//block_jump_x
+
   //縦軸の駒を飛び越えることはできない。
   let block_jump_y = function(){
     let count = Math.abs(beforeY - afterY) - 1;
@@ -106,9 +107,7 @@ function shogi_rule(koma,board81,afterX,afterY){
     return true;
   }//block_jump_y
 
-  //block_jump_xy
-  //if()もし斜め上に行くなら、斜め下に行くなら...を判定し、
-  //その通り道に駒があるかどうかcheck|(beforex-afterx)|-1回for文で判定したい
+  //斜めに進む時も飛び越え不可。
   let block_jump_xy = function(){
     let count = Math.abs(beforeX - afterX) - 1;
     if(afterX - beforeX > 0 ){ //左側に進んでいる場合
