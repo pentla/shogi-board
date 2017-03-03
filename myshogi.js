@@ -271,7 +271,7 @@
     //盤、駒台のリセットボタン
     resetBtn = document.getElementById("btn");
     resetBtn.addEventListener('click' , function(){
-      initialize_board(board81);
+      initialize_board81(board81);
       write_board_to_html(line_koma(koma,board81));
       reset_komadai();
     });
