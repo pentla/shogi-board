@@ -2,7 +2,7 @@
 //歩なら前にしか進めない。
 //ルール違反ならfalseを返す。
 function shogi_rule(koma,board81,afterX,afterY){
-  'use strict';
+  
   let beforeX = recorded.x;
   let beforeY = recorded.y;
 

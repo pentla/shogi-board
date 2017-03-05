@@ -50,6 +50,75 @@
     }
     var koma = new KomaName();
 
+    class Koma {
+      constructor(type){
+        this.type = type;
+        // this.number = number;
+        this.selected = false;
+        this.picture = document.getElementByid(type);
+      }
+      get function(){
+        return this.type_;
+      }
+      set function(value){
+        this.type_ = value;
+      }
+
+      let beforeX = recorded.x;
+      let beforeY = recorded.y;
+      //9方位に進んでいるかどうかをそれぞれ定義する。
+      //真っ直ぐに進んでいるならtrueを返す。
+      let straight = function(){
+        if(beforeX === afterX && beforeY - 1 === afterY){
+          return true;
+        } else {return false;}
+      }
+      //右ならtrueを返す。
+      let right = function(){
+        if(beforeX - 1 === afterX && beforeY === afterY){
+          return true;
+        } else {return false;}
+      }
+      //右上
+      let rightup = function(){
+        if(beforeX - 1 === afterX && beforeY - 1 === afterY){
+          return true;
+        } else {return false;}
+      }
+      //右下
+      let rightdown = function(){
+        if(beforeX - 1 === afterX && beforeY + 1 === afterY){
+          return true;
+        } else {return false;}
+      }
+      let left = function(){
+        if(beforeX + 1 === afterX && beforeY === afterY){
+          return true;
+        } else {return false;}
+      }
+      let leftup = function(){
+        if(beforeX + 1 === afterX && beforeY - 1 === afterY){
+          return true;
+        } else {return false;}
+      }
+      let leftdown = function(){
+        if(beforeX + 1 === afterX && beforeY + 1 === afterY){
+          return true;
+        } else {return false;}
+      }
+      let goback = function(){
+        if(beforeX  === afterX && beforeY + 1 === afterY){
+          return true;
+        } else {return false;}
+      }
+    } //class koma
+
+    let EMPTY = new Koma;
+    let FU    = new Koma;
+    FU.moving = function(beforeX,beforeY){
+      if(!Koma.straight()){return false;}
+    };
+
     var komaType= [];
     put_KomaPicture_into_komaType(komaType);
 

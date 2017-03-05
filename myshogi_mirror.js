@@ -1,5 +1,48 @@
 //実験中なのでまだ使いません。
 
+//banのなかにboard81を形成する関数をすべて入れる。
+
+//komaを大量生産する。
+var KomaName = function(){
+  this.EMPTY =          0;
+  this.senteMin =       1;
+  this.senteMax =      14;
+  this.goteMin  =      15;
+  this.goteMax  =      28;
+  this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
+
+  this.FU    =          1;
+  this.TO    =          2;
+  this.KYO   =          3;
+  this.NKYO  =          4;
+  this.KEI   =          5;
+  this.NKEI  =          6;
+  this.GIN   =          7;
+  this.NGIN  =          8;
+  this.KIN   =          9;
+  this.HI    =         10;
+  this.RYU   =         11;
+  this.KAKU  =         12;
+  this.UMA   =         13;
+  this.GYOKU =         14;
+
+  this.FU_   =         15;
+  this.TO_   =         16;
+  this.KYO_  =         17;
+  this.NKYO_ =         18;
+  this.KEI_  =         19;
+  this.NKEI_ =         20;
+  this.GIN_  =         21;
+  this.NGIN_ =         22;
+  this.KIN_  =         23;
+  this.HI_   =         24;
+  this.RYU_  =         25;
+  this.KAKU_ =         26;
+  this.UMA_  =         27;
+  this.GYOKU_=         28;
+}
+var koma = new KomaName();
+
   ban = document.getElementById("ban");
   sente_komadai = document.getElementById("sente_komadai");
   gote_komadai = document.getElementById("gote_komadai");
@@ -17,21 +60,26 @@
       this.type = type;
       // this.number = number;
       this.selected = false;
-      this.picture = document.getElementByid(type);
+      this.picture = document.getElementByid(type);//stringで保持したい。
     }
-    get type(){
-      return this._type;
+    get: function(){
+      return this.type_;
     }
-    set type(value){
-      this._type = value;
+    set: function(value){
+      this.type_ = value;
     }
-  }
-  koma.prototype.FU_promote(){
-    return TO;
-  }
+    
+
+  } //class koma
+
+
   let EMPTY = new koma("empty"),
       FU = new koma("fu"),
       KYO = new koma("kyo");
+
+      FU.moving = function(x,y){
+
+      }
 
   let virtualBan = [];
   function make_virtualBan(){
