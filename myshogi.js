@@ -91,20 +91,14 @@
     var motigoma = false;//持ち駒を掴んでいるか
     var sente = true;
 
-    //banに入っている全ての要素を消す。
-    function initialize_ban(){
+    function write_board_to_html(){
+      let tmpDocumentFragment = document.createDocumentFragment();
+      //htmlの初期化
       while(ban.firstChild){
         ban.removeChild(ban.firstChild);
       }
-    }
-
-    //駒の画像をhtmlに表示。
-    function write_board_to_html(){
-      let tmpDocumentFragment = document.createDocumentFragment();
-      initialize_ban();
       for( let y = 1; y <= 9 ; y++){
       for( let x = 1; x <= 9 ; x++){
-        //board81で決めた場所に駒の画像を入れて、位置を調整
         let c;
         c = komaType[board81[x][y]].cloneNode(true);
         c.style.right = ((x-1) * 36 )+ 'px';
@@ -143,7 +137,6 @@
           }
           //選択した駒を記録して、色を赤にする。
           c.style.background = 'red';
-          console.log("red");
           recorded = new RecordKoma(x, y, selectingKomaName,undefined);
           //グローバル変数で定義しているのでバグでるかも
           selected = true;
@@ -184,11 +177,19 @@
             //持ち駒を打って、駒台から持ち駒を消す。
             board81[x][y] = recordedMotigoma.type;
             if(sente){
-              senteKomadai.removeChild(recordedMotigoma.removeInfo);
-              senteMotigoma --;
-              }else{
-              goteKomadai.removeChild(recordedMotigoma.removeInfo);
-              goteMotigoma --;
+              senteMotigomaArray.some(function(value,index){
+                if(value === recordedMotigoma.type){
+                  senteMotigomaArray.splice(index,1);
+                }
+              });
+              komadai_appendChild(senteMotigomaArray);
+            }else{
+              goteMotigomaArray.some(function(value,index){
+                if(value === recordedMotigoma.type){
+                  goteMotigomaArray.splice(index,1);
+                }
+              });
+              komadai_appendChild(goteMotigomaArray);
             }
             //打ったのでmotigoma , selectedはリセット。
             motigoma = false;
@@ -202,72 +203,76 @@
     //todo:ifの階層を１段階減らしたい。
 
     //持ち駒の数:次は配列として処理したい。
-    var senteMotigoma = 0;
-    var goteMotigoma = 0;
+    let senteMotigomaArray = [];
+    let goteMotigomaArray = [];
 
-    //駒の所有者を変えて駒台に追加する。引数は捕られた駒。
-    function put_to_komadai(caughtKoma){
+    function put_to_komadai(caughtKoma){//新しく作っているもの
       let betrayKoma;
       if(sente){
         betrayKoma = caughtKoma - 14;
-        //先手の同じ種類の駒になる。
-        komadai_appendChild(senteKomadai,betrayKoma,senteMotigoma);
-        senteMotigoma++;
-      }else{
+        senteMotigomaArray.push(betrayKoma);
+        senteMotigomaArray.sort(function(x,y){
+          return x - y;
+        });
+        komadai_appendChild(senteMotigomaArray);
+      } else {
         betrayKoma = caughtKoma + 14;
-        //後手の同じ種類の駒になる。
-        komadai_appendChild(goteKomadai,betrayKoma,goteMotigoma);
-        goteMotigoma++;
+        goteMotigomaArray.push(betrayKoma);
+        goteMotigomaArray.sort(function(x,y){
+          return x - y;
+        });
+        komadai_appendChild(goteMotigomaArray);
       }
-    };
-
-    function komadai_appendChild(who_komadai ,betrayKoma ,who_motigoma){
+    }
+    function komadai_appendChild(whoMotigomaArray){//新しく作っているもの
       let thenTeban = sente;
-      //駒台に駒を追加する。
-      let c;
-      c = komaType[betrayKoma].cloneNode(true);
-      c.style.border = 'none';
-      //駒台には3*3個乗るように。って思ったけど・・・
-      if(who_motigoma < 3){
-        c.style.left = (who_motigoma * 36)       + 'px';
+      let whoKomadai = (sente)? senteKomadai : goteKomadai;
+      while(whoKomadai.firstChild){
+        whoKomadai.removeChild(whoKomadai.firstChild);
       }
-      else if(who_motigoma < 6){
-        c.style.left = ((who_motigoma - 3) * 36) + 'px';
-        c.style.top =  '39px';
-      }
-      else {
-        c.style.left = ((who_motigoma - 6) * 36) + 'px';
-        c.style.top =  '78px';
-      }
-      //駒台の駒をクリックすれば選択状態(selected)になる。
-      c.addEventListener('click' , function(){
-        if(thenTeban !== sente)return;
-        if(motigoma){
-          console.log("cancel motigoma");
-          c.style.background = 'none';
-          motigoma = false;
-          selected = false;
-          return;
+      for(let length = whoMotigomaArray.length, count = 0;length > 0;length--,count++){
+        let c = komaPicture[whoMotigomaArray[count]].cloneNode(true);
+        c.style.border = 'none';
+        //駒台には3*3個乗るように
+        if(count < 3){
+          c.style.left = (count * 36)     +'px';
         }
-        c.style.background = 'red';
-        recordedMotigoma = new RecordKoma(undefined,undefined,betrayKoma,c);
-        //引数にundefinedを送っているので、バグの原因になる？
-        selected = true;
-        motigoma = true;
-      });
-      who_komadai.appendChild(c);
-    }
-
-    function reset_komadai(){
-      while(goteKomadai.firstChild){
-        goteKomadai.removeChild(goteKomadai.firstChild);
+        else if(count < 6){
+          c.style.left = ((count - 3)*36) +'px';
+          c.style.top  = '39px';
+        }
+        else {
+          c.style.left = ((count - 6)*36) +'px';
+          c.style.top  = '78px';
+        }
+        c.addEventListener('click',function(){
+          if(thenTeban !== sente)return;//相手の駒を使うことはできない
+          if(motigoma){//すでに持ち駒が選択されているなら
+            console.log("cancel motigoma");
+            c.style.background = 'none';
+            motigoma = false;
+            selected = false;
+            return;
+          }
+          c.style.background = 'red';
+          recordedMotigoma = new RecordKoma(undefined,undefined,whoMotigomaArray[count],c);
+          //引数にundefinedを送っているので、バグの原因になる？
+          selected = true;
+          motigoma = true;
+        });
+        whoKomadai.appendChild(c);
       }
-      while(senteKomadai.firstChild){
-        senteKomadai.removeChild(senteKomadai.firstChild);
-      }
-      senteMotigoma = 0;
-      goteMotigoma = 0;
     }
+    // function reset_komadai(){
+    //   while(goteKomadai.firstChild){
+    //     goteKomadai.removeChild(goteKomadai.firstChild);
+    //   }
+    //   while(senteKomadai.firstChild){
+    //     senteKomadai.removeChild(senteKomadai.firstChild);
+    //   }
+    //   senteMotigoma = 0;
+    //   goteMotigoma = 0;
+    // }
 
     //盤、駒台のリセットボタン
     resetBtn = document.getElementById("btn");
