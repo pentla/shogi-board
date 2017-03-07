@@ -272,23 +272,13 @@
         whoKomadai.appendChild(c);
       }
     }
-    // function reset_komadai(){
-    //   while(goteKomadai.firstChild){
-    //     goteKomadai.removeChild(goteKomadai.firstChild);
-    //   }
-    //   while(senteKomadai.firstChild){
-    //     senteKomadai.removeChild(senteKomadai.firstChild);
-    //   }
-    //   senteMotigoma = 0;
-    //   goteMotigoma = 0;
-    // }
 
-    //盤、駒台のリセットボタン
-    resetBtn = document.getElementById("btn");
-    resetBtn.addEventListener('click' , function(){
-      initialize_board81(board81);
-      write_board_to_html(line_koma(koma,board81));
-      // reset_komadai();
-    });
+    // //盤、駒台のリセットボタン
+    // resetBtn = document.getElementById("btn");
+    // resetBtn.addEventListener('click' , function(){
+    //   initialize_board81(board81);
+    //   write_board_to_html(line_koma(koma,board81));
+    //   // reset_komadai();
+    // });
 
 })();
