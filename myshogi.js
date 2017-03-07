@@ -50,16 +50,16 @@
     }
     var koma = new KomaName();
 
-    var komaType= [];
-    put_KomaPicture_into_komaType(komaType);
+    var komaPicture= [];
+    put_KomaPicture_to_array(komaPicture);
 
-    function put_KomaPicture_into_komaType(komaType){
+    function put_KomaPicture_to_array(komaPicture){
       let komaPictureList = document.getElementById('komaPictureList');
       let child = komaPictureList.firstChild;
       let i = 0;
       while(child){
         if(child.nodeType === 1){
-          komaType[i] = child;
+          komaPicture[i] = child;
           i++;
         }
         child = child.nextSibling;
@@ -69,7 +69,7 @@
     /**
     * 9 × 9マスの盤。
     * board81のマスに数値を入れる
-    * -> それぞれのマスにkomaTypeの画像を用意する
+    * -> それぞれのマスにkomaPictureの画像を用意する
     * -> 全て揃ったらbanに情報を入れる。 -> 盤の完成
     */
     var board81= [];
@@ -100,7 +100,7 @@
       for( let y = 1; y <= 9 ; y++){
       for( let x = 1; x <= 9 ; x++){
         let c;
-        c = komaType[board81[x][y]].cloneNode(true);
+        c = komaPicture[board81[x][y]].cloneNode(true);
         c.style.right = ((x-1) * 36 )+ 'px';
         c.style.top =  ((y-1) * 39 )+ 'px';
         select_or_move_koma(x,y,c);

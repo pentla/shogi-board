@@ -2,7 +2,7 @@
 //歩なら前にしか進めない。
 //ルール違反ならfalseを返す。
 function shogi_rule(koma,board81,afterX,afterY){
-  
+
   let beforeX = recorded.x;
   let beforeY = recorded.y;
 
@@ -198,23 +198,23 @@ function shogi_rule(koma,board81,afterX,afterY){
     }
     case koma.RYU:
     case koma.RYU_:{
-      if((straight() || leftup() || left() || leftdown() || rightup() || right() || rightdown() || goback() || (beforeX === afterX) || (beforeY === afterY) ) && (block_jump_y()) && (block_jump_x())){
+      if( leftup() ||  leftdown() || rightup() || rightdown() || ((beforeX === afterX || beforeY === afterY) && (block_jump_x()) && (block_jump_y()))){
         break;
       } else{ return false;}
     }
     case koma.KAKU:
     case koma.KAKU_:{
       let a = beforeX - afterX;
-      //block_jump_xyが出たら差し替え。
       if(((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
-      // if((a === beforeY - afterY) || (a === afterY - beforeY)){
       promote();
       break;
     } else {return false;}
   }
     case koma.UMA:
     case koma.UMA_:{
-
+      if(straight() || right() || left() || goback() || ((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
+        break;
+      } else {return false;}
     }
     case koma.GYOKU:
     case koma.GYOKU_:{
