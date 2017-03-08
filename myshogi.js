@@ -2,14 +2,8 @@
     //関数 function  アンダースコア記法
     //変数 let       camelCase記法
     //クラス         最初の文字は大文字
-    //定数           全て大文字。(未だ使ってないけど、駒の名前を定義するつもり)
+    //定数           全て大文字。
 
-    //減らしたい変数
-    //sente , board81[x][y] , motigoma
-    //駒を打った時の駒台の整理
-
-    //マスを数値化する。
-    //0 何もないマス。 1 ~ 14 先手の駒。  15 ~ 28 後手の駒。
     const KomaName = function(){
       this.EMPTY =          0;
       this.senteMin =       1;
@@ -90,6 +84,7 @@
     let goteKomadai = document.getElementById('goteKomadai');
     let senteKomadai = document.getElementById('senteKomadai');
 
+    //駒を選択しているかなどの盤上のプロパティ。
     let selecting = false;
     let motigomaSelecting = false;
     let sente = true;
@@ -113,22 +108,18 @@
       ban.appendChild(tmpDocumentFragment);
     };
     write_board_to_html(line_koma(koma,board81));
-    //todo:cの代わりにboard81[x][y]を使ってコード短くできないか？
-
 
     let RecordKoma = function(place_x ,place_y ,record_komaType, removeInfo){
       this.x = place_x;
       this.y = place_y;
       this.type = record_komaType;
       this.removeInfo = removeInfo;
-      // this.removed = removed;//持ち駒を使った時にその駒を消す。
     }
 
     function select_or_move_koma(x, y, c){
       c.addEventListener('click' , function(){
         let selectingKomaName = board81[x][y];
         if(!selecting){
-          //駒が選択されていないなら
          //空白のマスは動かせない。相手の駒も動かせない。
          if(selectingKomaName === koma.EMPTY) return;
          if(sente){
@@ -138,12 +129,10 @@
             if(selectingKomaName <= koma.senteMax)
             return;
           }
-          //選択した駒を記録して、色を赤にする。
           c.style.background = 'red';
           recorded = new RecordKoma(x, y, selectingKomaName,undefined);
-          //グローバル変数で定義しているのでバグでるかも
           selecting = true;
-        }else if(!motigomaSelecting){//駒を移動させるなら
+        }else if(!motigomaSelecting){
             //同じ場所をクリックするなら行動キャンセル。
             if(selectingKomaName === board81[recorded.x][recorded.y]){
               selecting = false;
@@ -156,18 +145,16 @@
               return;
             }
             //移動場所に駒がいたら駒台へ。
-            //todo:相手の駒に限定させないとバグの元になる。
             if(selectingKomaName !== koma.EMPTY) {
               put_to_komadai(selectingKomaName);
             }
             //先ほど記録した駒を移動
-            //ここのboard81[x][y]は変数の使用禁止
             board81[x][y] = recorded.type;
             board81[recorded.x][recorded.y] = koma.EMPTY;
             selecting = false;
             sente = !sente;
             write_board_to_html();
-        }else if(motigomaSelecting){//持ち駒を掴んでいるなら。
+        }else if(motigomaSelecting){
             if(!put_motigoma_rule(koma,board81,x,y)){
                 console.log("cant put motigoma");
                 recordedMotigoma.removeInfo.background = "none";
@@ -194,7 +181,6 @@
               });
               komadai_appendChild(goteMotigomaArray);
             }
-            // 打ったのでmotigomaSelecting , selectingはリセット。
             motigomaSelecting = false;
             selecting = false;
             sente = !sente;
@@ -203,9 +189,7 @@
         }
       });
     }
-    //todo:ifの階層を１段階減らしたい。
 
-    //持ち駒の数:次は配列として処理したい。
     let senteMotigomaArray = [];
     let goteMotigomaArray = [];
 
@@ -216,7 +200,7 @@
           break;
         }
       }
-      let betrayKoma;
+      let betrayKoma;//取られた駒は敵に寝返る。
       if(sente){
         betrayKoma = caughtKoma - 14;
         senteMotigomaArray.push(betrayKoma);
@@ -265,20 +249,10 @@
           }
           c.style.background = 'red';
           recordedMotigoma = new RecordKoma(undefined,undefined,whoMotigomaArray[count],c);
-          //引数にundefinedを送っているので、バグの原因になる？
           selecting = true;
           motigomaSelecting = true;
         });
         whoKomadai.appendChild(c);
       }
     }
-
-    // //盤、駒台のリセットボタン
-    // resetBtn = document.getElementById("btn");
-    // resetBtn.addEventListener('click' , function(){
-    //   initialize_board81(board81);
-    //   write_board_to_html(line_koma(koma,board81));
-    //   // reset_komadai();
-    // });
-
 })();

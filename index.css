@@ -20,7 +20,10 @@ main{
   background:url("backimg/sg_ban.jpg");
   position:relative;
 }
-#container{
+#text{
+  text-align:left;
+  padding:2px;
+  background:#fff;
 }
 #ban_shape{
   width:324px;
@@ -28,9 +31,7 @@ main{
   position:absolute;
   left:243.5px;
   top:86px;
-  /*左 243.5px 上86px*/
 }
-
 .komadai{
   width:120px;
   height:120px;

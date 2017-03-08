@@ -6,7 +6,6 @@ function shogi_rule(koma,board81,afterX,afterY){
   let beforeX = recorded.x;
   let beforeY = recorded.y;
 
-  //9方位に進んでいるかどうかをそれぞれ定義する。
   //真っ直ぐに進んでいるならtrueを返す。
   let straight = function(){
     if(beforeX === afterX && beforeY - 1 === afterY){

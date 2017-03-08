@@ -7,6 +7,7 @@
   </head>
   <body>
     <p id = "text">
+      ソースは<a href="https://github.com/watikuka/shogi-board">https://github.com/watikuka/shogi-board</a>です。
     </p>
     <span style="display:none;" id="komaPictureList">
     <!-- 空白マス -->
@@ -26,7 +27,7 @@
     <div class="koma my"id="kaku" ><img src="koma/kaku.png"></div>
     <div class="koma my"id="uma" ><img src="koma/uma.png"></div>
     <div class="koma my"id="gyoku" ><img src="koma/gyoku.png"></div>
-    <!-- ここから先は敵の駒。 -->
+    <!-- 敵の駒 -->
     <div class="koma teki"id="tfu" ><img src="koma/fu_.png"></div>
     <div class="koma teki"id="tto" ><img src="koma/to_.png"></div>
     <div class="koma teki"id="tkyo" ><img src="koma/kyo_.png"></div>
@@ -44,13 +45,17 @@
   </span>
   <main>
     <span id="container">
-    <div class="textbox" id="textbox1"></div>
+    <div class="textbox" id="textbox1">
+      <p>▲先手</p>
+    </div>
     <div class="komadai" id="goteKomadai"></div>
     <div id="ban_shape">
         <div id="ban"></div>
     </div>
     <div class="komadai" id="senteKomadai"></div>
-    <div class="textbox" id="textbox2"></div>
+    <div class="textbox" id="textbox2">
+      <p>▽後手</p>
+    </div>
   </span>
   </main>
     <script type="text/javascript" src="jquery/jquery-3.1.1.slim.min.js" ></script>
