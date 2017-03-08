@@ -20,6 +20,12 @@ main{
   background:url("backimg/sg_ban.jpg");
   position:relative;
 }
+p{
+  font-size:14px;
+}
+.opacity{
+  opacity:0.5;
+}
 #text{
   text-align:left;
   padding:2px;

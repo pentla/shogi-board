@@ -83,11 +83,25 @@
     let ban = document.getElementById('ban');
     let goteKomadai = document.getElementById('goteKomadai');
     let senteKomadai = document.getElementById('senteKomadai');
+    let senteText = document.getElementById('senteText');
+    let goteText = document.getElementById('goteText');
+    goteText.classList.add('opacity');
 
     //駒を選択しているかなどの盤上のプロパティ。
     let selecting = false;
     let motigomaSelecting = false;
     let sente = true;
+
+    function change_sente(){
+      if(sente){
+        senteText.classList.add('opacity');
+        goteText.classList.remove('opacity');
+      } else {
+        senteText.classList.remove('opacity');
+        goteText.classList.add('opacity');
+      }
+      sente = !sente;
+    }
 
     function write_board_to_html(){
       let tmpDocumentFragment = document.createDocumentFragment();
@@ -139,7 +153,7 @@
               c.style.background = "none";
               return;
             }
-            //ルールに沿っていないなら進めません。
+            //ルールに沿っていないなら進めない。
             if(!shogi_rule(koma,board81,x,y)){
               console.log("cant go there");
               return;
@@ -152,7 +166,7 @@
             board81[x][y] = recorded.type;
             board81[recorded.x][recorded.y] = koma.EMPTY;
             selecting = false;
-            sente = !sente;
+            change_sente();
             write_board_to_html();
         }else if(motigomaSelecting){
             if(!put_motigoma_rule(koma,board81,x,y)){
@@ -161,7 +175,6 @@
                 motigomaSelecting = false;
                 return;
             }
-
             //駒がある場所に打つことはできない。
             if(selectingKomaName !== koma.EMPTY){return;}
             //持ち駒を打って、駒台から持ち駒を消す。
@@ -183,7 +196,7 @@
             }
             motigomaSelecting = false;
             selecting = false;
-            sente = !sente;
+            change_sente();
             write_board_to_html();
             //打った持ち駒を盤に表示させるためもう一度表示。
         }
@@ -194,7 +207,7 @@
     let goteMotigomaArray = [];
 
     function put_to_komadai(caughtKoma){
-      for(let length = koma.narigoma.length;length > 0;length--){
+      for(let length = koma.narigoma.length;length >= 0;length--){
         if(koma.narigoma[length] === caughtKoma){
           caughtKoma--;
           break;
