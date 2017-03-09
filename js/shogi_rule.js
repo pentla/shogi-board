@@ -151,10 +151,7 @@ function shogi_rule(koma,board81,afterX,afterY){
     console.log("xy true");
     return true;
   }
-  console.log(recorded.type);
-
   switch(recorded.type){
-
     case koma.FU:{
       if(straight()){
         promote();
@@ -211,6 +208,7 @@ function shogi_rule(koma,board81,afterX,afterY){
   }
     case koma.UMA:
     case koma.UMA_:{
+      let a = beforeX - afterX;
       if(straight() || right() || left() || goback() || ((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
         break;
       } else {return false;}
