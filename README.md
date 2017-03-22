@@ -3,5 +3,5 @@
 https://watikuka.github.io/shogi-board/
 
 10月の終わり頃からプログラミングを始めました。
-javascriptはほぼ全て自作ですが駒、盤の画像はこちらから(こっそり)いただいています。
+javascript含むコードは自作ですが、駒、盤の画像はこちらからお借りしています。
 http://cgi2.nhk.or.jp/goshogi/kifu/sgs.cgi?d=20170305
