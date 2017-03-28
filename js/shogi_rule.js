@@ -64,6 +64,19 @@ function shogi_rule(koma,board81,afterX,afterY){
       }
     }
   }
+  function choose_promote_koma(){
+    let modal = document.getElementById('modal');
+    let yes = document.getElementById('yes');
+    let no = document.getElementById('no');
+    //もーダルを出す、yesかnoを受け取る、その値がyesなら駒がなる、noなら成らない。
+    yes.addEventListener('click' , function(){
+      recorded.type++;
+      write_koma();
+    });
+    no.addEventListener('click' , function(){
+      return;
+    })
+  }
   //横軸の駒を飛び越えることはできない。
   let block_jump_x = function(){
     let count = Math.abs(beforeX - afterX) - 1;

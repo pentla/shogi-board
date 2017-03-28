@@ -6,11 +6,6 @@
 
     const KomaName = function(){
       this.EMPTY =          0;
-      this.senteMin =       1;
-      this.senteMax =      14;
-      this.goteMin  =      15;
-      this.goteMax  =      28;
-      this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
 
       this.FU    =          1;
       this.TO    =          2;
@@ -41,14 +36,18 @@
       this.KAKU_ =         26;
       this.UMA_  =         27;
       this.GYOKU_=         28;
+
+      this.senteMin =       1;
+      this.senteMax =      14;
+      this.goteMin  =      15;
+      this.goteMax  =      28;
+      this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
       this.narigoma = [2,4,6,8,11,13,16,18,20,22,25,27];
 
     }
     let koma = new KomaName();
 
     let komaPicture = [];
-    put_KomaPicture_to_array(komaPicture);
-
     function put_KomaPicture_to_array(komaPicture){
       let komaPictureList = document.getElementById('komaPictureList');
       let child = komaPictureList.firstChild;
@@ -61,6 +60,7 @@
         child = child.nextSibling;
       }
     }
+    put_KomaPicture_to_array(komaPicture);
 
     /**
     * 9 × 9マスの盤。
@@ -253,7 +253,7 @@
         }
         c.addEventListener('click',function(){
           if(thenTeban !== sente)return;//相手の駒を使うことはできない
-          if(motigomaSelecting){//すでに持ち駒が選択されているなら
+          if(motigomaSelecting){//すでに持ち駒が選択されているなら選択状態を解除
             console.log("cancel motigoma");
             c.style.background = 'none';
             motigomaSelecting = false;

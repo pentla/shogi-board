@@ -97,3 +97,26 @@ p{
 #btn:hover{
   opacity:0.8;
 }
+#modal{
+  background:#fff;
+  width:300px;
+  padding:20px;
+  border-radius:4px;
+  position:absolute;
+  top:40px;
+  left:0;
+  right:0;
+  margin:0 auto;
+  transition:.4s;
+  z-index:3;
+}
+#close{
+  cursor:
+}
+#yes, #no{
+  border:1px solid #ccc;
+  padding:20px;
+}
+.hidden{
+  display:none;
+}
