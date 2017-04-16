@@ -87,11 +87,11 @@
     let goteText = document.getElementById('goteText');
     goteText.classList.add('opacity');
 
-    //駒を選択しているかなどの盤上のプロパティ。
     let selecting = false;
     let motigomaSelecting = false;
     let sente = true;
 
+    //グローバル変数senteのtrue/falseを入れ替える
     function change_sente(){
       if(sente){
         senteText.classList.add('opacity');
@@ -103,6 +103,7 @@
       sente = !sente;
     }
 
+    //9×9の盤を作成、駒の情報を入れ、htmlに挿入する
     function write_board_to_html(){
       let tmpDocumentFragment = document.createDocumentFragment();
       //htmlの初期化
@@ -123,6 +124,7 @@
     };
     write_board_to_html(line_koma(koma,board81));
 
+    //１度目のクリックで駒の情報を記録する
     let RecordKoma = function(place_x ,place_y ,record_komaType, removeInfo){
       this.x = place_x;
       this.y = place_y;
@@ -130,6 +132,7 @@
       this.removeInfo = removeInfo;
     }
 
+    //駒１つ１つにこの情報が渡される。
     function select_or_move_koma(x, y, c){
       c.addEventListener('click' , function(){
         let selectingKomaName = board81[x][y];
@@ -206,6 +209,7 @@
     let senteMotigomaArray = [];
     let goteMotigomaArray = [];
 
+    //駒台に取られた駒を送る
     function put_to_komadai(caughtKoma){
       for(let length = koma.narigoma.length;length >= 0;length--){
         if(koma.narigoma[length] === caughtKoma){
@@ -230,6 +234,7 @@
         komadai_appendChild(goteMotigomaArray);
       }
     }
+
     function komadai_appendChild(whoMotigomaArray){
       let thenTeban = sente;
       let whoKomadai = (sente)? senteKomadai : goteKomadai;

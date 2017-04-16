@@ -8,10 +8,10 @@ width 129px
 height 129px
 */
 body{
-font-family:Arial, sans-serif;
-text-align:center;
-width: 1000px;
-margin:0 auto;
+  font-family:Arial, sans-serif;
+  text-align:center;
+  width: 1000px;
+  margin:0 auto;
 }
 main{
   width:810px;
