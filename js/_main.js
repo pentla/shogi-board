@@ -1,13 +1,92 @@
 //クラスを使って書き直し
 
-function board(){
+function Board(){
     this.sente = true;
-    this.cell = [];
-
-
-    buildBoard(cell);
+    this.firstMakeBoard();
 }
-board.prototype.name = {
+Board.prototype = {
+    ban:            document.getElementById("ban"),
+    banInit: function(){
+        while(ban.firstChild){
+          ban.removeChild(ban.firstChild);
+        }
+    },
+    sente_komadai:  document.getElementById("senteKomadai"),
+    gote_komadai:   document.getElementById("goteKomadai"),
+    senteText:      document.getElementById("senteText"),
+    goteText:       document.getElementById("goteText"),
+}
+Board.prototype.firstMakeBoard = function(){
+    this.init();
+    this.lineKoma();
+    this.buildBoard();
+}
+Board.prototype.init = function(){
+    //9 * 9マスを作り、変数cellに入れます。
+    for(let x = 1; x <= 9 ;x++){
+        this.cell[x] = [];
+    for(let y = 1; y <= 9 ;y++){
+        this.cell[x][y] = Koma.EMPTY;
+    }
+    }
+    return this.cell;
+};
+Board.prototype.lineKoma = function(){
+    for(let i = 1;i <= 9; i++){
+      this.cell[i][7] = Koma.FU;
+      this.cell[i][3] = Koma.FU_;
+    }
+    this.cell[1][9] = Koma.KYO;
+    this.cell[9][9] = Koma.KYO;
+    this.cell[2][9] = Koma.KEI;
+    this.cell[8][9] = Koma.KEI;
+    this.cell[3][9] = Koma.GIN;
+    this.cell[7][9] = Koma.GIN;
+    this.cell[6][9] = Koma.KIN;
+    this.cell[4][9] = Koma.KIN;
+    this.cell[2][8] = Koma.HI;
+    this.cell[8][8] = Koma.KAKU;
+    this.cell[5][9] = Koma.GYOKU;
+
+    this.cell[1][1] = Koma.KYO_;
+    this.cell[9][1] = Koma.KYO_;
+    this.cell[2][1] = Koma.KEI_;
+    this.cell[8][1] = Koma.KEI_;
+    this.cell[3][1] = Koma.GIN_;
+    this.cell[7][1] = Koma.GIN_;
+    this.cell[6][1] = Koma.KIN_;
+    this.cell[4][1] = Koma.KIN_;
+    this.cell[2][2] = Koma.KAKU_;
+    this.cell[8][2] = Koma.HI_;
+    this.cell[5][1] = Koma.GYOKU_;
+}
+Board.prototype.buildBoard = function(){
+    var tmp = document.createDocumentFragment();
+    for( let y = 1; y <= 9 ; y++){
+    for( let x = 1; x <= 9 ; x++){
+      let c;
+      c = komaPicture[this.cell[x][y]].cloneNode(true);
+      c.style.right = ((x-1) * 36 )+ 'px';
+      c.style.top =  ((y-1) * 39 )+ 'px';
+      select_or_move_koma(x,y,c);
+      tmpDocumentFragment.appendChild(c);
+    }
+    }
+    ban.appendChild(tmpDocumentFragment);
+  };
+};
+Board.prototype.changeSente = function(){
+    this.sente = !this.sente;
+};
+
+
+
+
+
+function Koma(){
+
+}
+Koma.prototype.name = {
     this.EMPTY =          0;
 
     this.FU    =          1;
@@ -46,15 +125,4 @@ board.prototype.name = {
     this.goteMax  =      28;
     this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
     this.narigoma = [2,4,6,8,11,13,16,18,20,22,25,27];
-}
-board.prototype.initialize = function(){
-    for(let x = 1; x <= 9 ;x++){
-      cell[x] = [];
-    for(let y = 1; y <= 9 ;y++){
-      board81[x][y] = koma.EMPTY;
-    }
-    }
-}
-board.prototype.buildBoard = function(){
-
-}
+};
