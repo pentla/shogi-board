@@ -72,7 +72,6 @@ function shogi_rule(koma,board81,afterX,afterY){
     modal.classList.add('hidden');
     yes.addEventListener('click' , function(){
       recorded.type++;
-
       write_koma();
     });
     no.addEventListener('click' , function(){
@@ -93,14 +92,12 @@ function shogi_rule(koma,board81,afterX,afterY){
     if(beforeX > afterX){
       for(let i = 1; count > 0; count--,i++){
         if(board81[beforeX - i][beforeY] !== koma.EMPTY){
-            console.log("not xjump");
             return false;
         }
       }
     }else{
       for(let i = 1; count > 0; count--,i++){
         if(board81[afterX - i][beforeY] !== koma.EMPTY){
-            console.log("not xjump");
             return false;
         }
       }
@@ -114,14 +111,12 @@ function shogi_rule(koma,board81,afterX,afterY){
     if(beforeY > afterY){
       for(let i = 1; count > 0; count--,i++){
         if(board81[beforeX][beforeY - i] !== koma.EMPTY){
-            console.log("not yjump");
             return false;
         }
       }
     }else{
       for(let i = 1; count > 0; count--,i++){
         if(board81[beforeX][afterY - i] !== koma.EMPTY){
-            console.log("not yjump");
             return false;
         }
       }
@@ -134,18 +129,14 @@ function shogi_rule(koma,board81,afterX,afterY){
     let count = Math.abs(beforeX - afterX) - 1;
     if(afterX - beforeX > 0){ //左側に進んでいる場合
       if(afterY - beforeY > 0){ //下側に進んでいる場合
-       console.log("leftdown");
        for(let i = 1;count > 0;count--,i++){
          if(board81[beforeX + i][beforeY + i] !== koma.EMPTY){
-           console.log("not xyjump");
            return false;
          }
        }
      }else{//if(afterY - beforeY > 0)上側に進んでいる場合
-       console.log("leftup");
        for(let i = 1;count > 0;count--,i++){
          if(board81[beforeX + i][beforeY - i] !== koma.EMPTY){
-           console.log("not xyjump");
            return false;
          }
        }
@@ -153,25 +144,19 @@ function shogi_rule(koma,board81,afterX,afterY){
    }
      if(afterX - beforeX < 0){   //右側に進んでいる場合
        if(afterY - beforeY > 0){ //下側に進んでいる場合
-         console.log("rightdown");
          for(let i = 1;count > 0;count--,i++){
            if(board81[beforeX - i][beforeY + i] !== koma.EMPTY){
-             console.log("not xyjump");
              return false;
            }
          }
        }else{//上側に進んでいる場合
-         console.log("rightup");
-         console.log(board81[7][7]);
          for(let i = 1;count > 0;count--,i++){
            if(board81[beforeX - i][beforeY - i] !== koma.EMPTY){
-             console.log("not xyjump");
              return false;
            }
          }
        }
      }
-    console.log("xy true");
     return true;
   }
   switch(recorded.type){

@@ -1,29 +1,26 @@
 <?php
-boardの機能
-盤の作成、先手・後手の管理buildboard,sente
-住所としての情報cell[]
+game オブジェクト
+    - board
+    - koma
+という構成になる。
 
-komadaiの機能
-先手・後手のふたつある
+board
+1. DOM操作で盤を表示
+2. 現在、どの駒がどこにいるのかの情報を持つ。
+3. sente,goteを管理する。
+4. koma以外の、細かいルールを把握する(王手、駒を取る、など)
+ここまで作ってみる(1時間)
 
-recordの機能
-どこの駒がどこに移動したかの情報を持つ。
-いずれは寄付に対応できるようにしたい。
+作り方は、本読むか聞くしかない
 
-komaの機能
-どこにいるか把握する
-画像を持つ
-だれが所持しているか(駒台に移動した時点で変化する)
-移動する(盤上で)
-移動する(駒台に)
+koma
+1. 管理：json？
+1.5 まとめてaddEventlistenerで上書き追加。
+2. addEventListenerで選択・動かすことができる。
+3. それぞれ動くことのできる場所の情報を持つ。
 
-駒ごとの情報
--- 画像をもつ --
-どこに移動できるか、の情報をもつ
-誰が所持しているか
-移動
-position-x,yの更新 + cellにもその情報を送る。
-現在地position-x,position-y,
+record
+棋譜の記録、待った、投了など
 
 
 完成系
@@ -43,7 +40,7 @@ koma:senteの駒か、goteの駒か、
 // var game =  new shogiGame("imfo", "board", "koma");
 shogiGame = function(){
 
-    imfo : 
+    imfo :
     board: html描画・管理sente gote
     koma:
 }

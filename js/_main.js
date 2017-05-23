@@ -10,14 +10,14 @@ function Record(){
 }
 
 function Board(){
-    this.sente = true;
-    this.cell = [];
 
     this.init();
     this.buildBoard();
 }
 
 Board.prototype.init = function(){
+    this.sente = true;
+    this.cell = [];
     //9 * 9マスを作り、変数cellに入れる。
     ban:            document.getElementById("ban"),
     sente_komadai:  document.getElementById("senteKomadai"),
