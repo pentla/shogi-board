@@ -1,4 +1,13 @@
 
+
+/**
+* 9 × 9マスの盤。
+* boardのマスに数値を入れる
+* -> それぞれのマスにkomaPictureの画像を用意する
+* -> 全て揃ったらbanに情報を入れる。 -> 盤の完成
+*/
+
+
 var KomaName = function(){
 
     this.EMPTY =          0;
@@ -40,7 +49,7 @@ var KomaName = function(){
     this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
     this.narigoma = [2,4,6,8,11,13,16,18,20,22,25,27];
 
-}
+};
 var koma = new KomaName();
 
 var komaPicture = [];
@@ -58,37 +67,36 @@ function put_KomaPicture_to_array(komaPicture){
 }
 put_KomaPicture_to_array(komaPicture);
 
-/**
-* 9 × 9マスの盤。
-* board81のマスに数値を入れる
-* -> それぞれのマスにkomaPictureの画像を用意する
-* -> 全て揃ったらbanに情報を入れる。 -> 盤の完成
-*/
 
-var board81= [];
-function initialize_board81(board81){
+
+var board= [];
+function init(board){
     for(var x = 1; x <= 9 ;x++){
-        board81[x] = [];
-        for(var y = 1; y <= 9 ;y++){
-            board81[x][y] = koma.EMPTY;
-        }
+        board[x] = [];
+    for(var y = 1; y <= 9 ;y++){
+        board[x][y] = koma.EMPTY;
     }
-};
-initialize_board81(board81);
+    }
+}
+init(board);
 
-var ban = document.getElementById('ban');
-var goteKomadai = document.getElementById('goteKomadai');
-var senteKomadai = document.getElementById('senteKomadai');
-var senteText = document.getElementById('senteText');
-var goteText = document.getElementById('goteText');
+//将棋盤、駒台、テキストをhtmlから回収
+var ban             = document.getElementById('ban');
+var goteKomadai     = document.getElementById('goteKomadai');
+var senteKomadai    = document.getElementById('senteKomadai');
+var senteText       = document.getElementById('senteText');
+var goteText        = document.getElementById('goteText');
 goteText.classList.add('opacity');
 
-var selecting = false;
+//駒をつかんでいるかどうか
+var selecting         = false;
+//持ち駒をつかんでいるかどうか
 var motigomaSelecting = false;
-var sente = true;
+//先手(true)か後手(false)か
+var sente             = true;
 
-//グローバル変数senteのtrue/falseを入れ替える
-function change_sente(){
+//手番の入れ替え
+function change_teban(){
     if(sente){
         senteText.classList.add('opacity');
         goteText.classList.remove('opacity');
@@ -99,17 +107,19 @@ function change_sente(){
     sente = !sente;
 }
 
-//9×9の盤を作成、駒の情報を入れ、htmlに挿入する
+//boardの情報をhtmlに挿入
 function write_board_to_html(){
 
+    //一度にまとめたほうが描画の回数を減らせる
     var tmpDocumentFragment = document.createDocumentFragment();
+
     while(ban.firstChild){
         ban.removeChild(ban.firstChild);
     }
     for( var y = 1; y <= 9 ; y++){
         for( var x = 1; x <= 9 ; x++){
             var c;
-            c = komaPicture[board81[x][y]].cloneNode(true);
+            c = komaPicture[board[x][y]].cloneNode(true);
             c.style.right = ((x-1) * 36 )+ 'px';
             c.style.top =  ((y-1) * 39 )+ 'px';
             select_or_move_koma(x,y,c);
@@ -117,10 +127,10 @@ function write_board_to_html(){
         }
     }
     ban.appendChild(tmpDocumentFragment);
-};
-write_board_to_html(line_koma(koma,board81));
+}
+write_board_to_html(line_koma(koma,board));
 
-//１度目のクリックで駒の情報を記録する
+//駒の情報を記録する
 var RecordKoma = function(place_x ,place_y ,record_komaType, removeInfo){
     this.x = place_x;
     this.y = place_y;
@@ -128,12 +138,16 @@ var RecordKoma = function(place_x ,place_y ,record_komaType, removeInfo){
     this.removeInfo = removeInfo;
 }
 
-//駒１つ１つにこの情報が渡される。
+//駒１つ１つに対するイベント設定
 function select_or_move_koma(x, y, c){
     c.addEventListener('click' , function(){
-        var selectingKomaName = board81[x][y];
+
+        var selectingKomaName = board[x][y];
+
         if(!selecting){
-            //空白のマスは動かせない。相手の駒も動かせない。
+        //盤上の駒をクリックした場合
+
+            //空白のマス、相手のマスに打つ場合は却下
             if(selectingKomaName === koma.EMPTY) return;
             if(sente){
                 if(selectingKomaName >= koma.goteMin)
@@ -142,42 +156,55 @@ function select_or_move_koma(x, y, c){
                 if(selectingKomaName <= koma.senteMax)
                 return;
             }
+
+            //選択する場合、駒の背景を赤に変え、記録する
             c.style.background = 'red';
             recorded = new RecordKoma(x, y, selectingKomaName,undefined);
             selecting = true;
+
         }else if(!motigomaSelecting){
-            //同じ場所をクリックするなら行動キャンセル。
-            if(selectingKomaName === board81[recorded.x][recorded.y]){
+        //駒を置く場所を指定するとき
+
+            //同じ場所をクリック、ルールに反している場合、却下
+            if(selectingKomaName === board[recorded.x][recorded.y]){
                 selecting = false;
                 c.style.background = "none";
                 return;
             }
-            //ルールに沿っていないなら進めない。
-            if(!shogi_rule(koma,board81,x,y)){
-                console.log("cant go there");
+            if(!shogi_rule(koma,board,x,y)){
                 return;
             }
-            //移動場所に駒がいたら駒台へ。
+
+            //移動先に駒がある場合、駒台へ
             if(selectingKomaName !== koma.EMPTY) {
                 put_to_komadai(selectingKomaName);
             }
-            //先ほど記録した駒を移動
-            board81[x][y] = recorded.type;
-            board81[recorded.x][recorded.y] = koma.EMPTY;
+
+            //1度目に記録した駒を移動
+            board[x][y] = recorded.type;
+            board[recorded.x][recorded.y] = koma.EMPTY;
+
+            //選択状態の解除、手番の変更、再描画
             selecting = false;
-            change_sente();
+            change_teban();
             write_board_to_html();
+
         }else if(motigomaSelecting){
-            if(!put_motigoma_rule(koma,board81,x,y)){
-                console.log("cant put motigoma");
+            //持ち駒をつかんだ場合
+
+            //持ち駒を置くルールに反している場合は却下
+            if(!put_motigoma_rule(koma,board,x,y)){
                 recordedMotigoma.removeInfo.background = "none";
                 motigomaSelecting = false;
                 return;
             }
-            //駒がある場所に打つことはできない。
+            //駒がある場所に打っている場合は却下
             if(selectingKomaName !== koma.EMPTY){return;}
+
+
             //持ち駒を打って、駒台から持ち駒を消す。
-            board81[x][y] = recordedMotigoma.type;
+            //先手なら先手の駒台、後手なら後手の駒台へ
+            board[x][y] = recordedMotigoma.type
             if(sente){
                 senteMotigomaArray.some(function(value,index){
                     if(value === recordedMotigoma.type){
@@ -193,27 +220,33 @@ function select_or_move_koma(x, y, c){
                 });
                 komadai_appendChild(goteMotigomaArray);
             }
+
+            //持ち駒の選択状態の解除
             motigomaSelecting = false;
+
             selecting = false;
-            change_sente();
+            change_teban();
             write_board_to_html();
-            //打った持ち駒を盤に表示させるためもう一度表示。
         }
     });
 }
 
+//駒台に入っている駒の情報の管理
 var senteMotigomaArray = [];
 var goteMotigomaArray = [];
 
-//駒台に取られた駒を送る
 function put_to_komadai(caughtKoma){
+
+    //取った駒が成り駒の場合、成っていない状態に戻す
     for(var length = koma.narigoma.length;length >= 0;length--){
         if(koma.narigoma[length] === caughtKoma){
             caughtKoma--;
             break;
         }
     }
-    var betrayKoma;//取られた駒は敵に寝返る。
+
+    //取られた駒は敵のものになる
+    var betrayKoma;
     if(sente){
         betrayKoma = caughtKoma - 14;
         senteMotigomaArray.push(betrayKoma);
@@ -232,15 +265,19 @@ function put_to_komadai(caughtKoma){
 }
 
 function komadai_appendChild(whoMotigomaArray){
+
+    //駒台に表示させる
     var thenTeban = sente;
     var whoKomadai = (sente)? senteKomadai : goteKomadai;
+
     while(whoKomadai.firstChild){
         whoKomadai.removeChild(whoKomadai.firstChild);
     }
+
+    //駒台には縦３つ、横に３つ並べることができる
     for(var length = whoMotigomaArray.length, count = 0;length > 0;length--,count++){
         var c = komaPicture[whoMotigomaArray[count]].cloneNode(true);
         c.style.border = 'none';
-        //駒台には3*3個乗るように
         if(count < 3){
             c.style.left = (count * 36)     +'px';
         }
@@ -252,21 +289,28 @@ function komadai_appendChild(whoMotigomaArray){
             c.style.left = ((count - 6)*36) +'px';
             c.style.top  = '78px';
         }
+
+        //持ち駒となった際のイベントリスナの設定
         c.addEventListener('click',function(){
-            if(thenTeban !== sente)return;//相手の駒を使うことはできない
-            if(motigomaSelecting){//すでに持ち駒が選択されているなら選択状態を解除
-                console.log("cancel motigoma");
+
+            //敵の駒台を使っているなら却下
+            if(thenTeban !== sente)return;
+
+            //すでに選択されている場合はもう一度クリックで解除
+            if(motigomaSelecting){
                 c.style.background = 'none';
                 motigomaSelecting = false;
                 selecting = false;
                 return;
             }
+
+            //背景を赤く換え、選択状態に移行
             c.style.background = 'red';
             recordedMotigoma = new RecordKoma(undefined,undefined,whoMotigomaArray[count],c);
             selecting = true;
             motigomaSelecting = true;
+
         });
         whoKomadai.appendChild(c);
     }
 }
-})();
