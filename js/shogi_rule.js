@@ -2,58 +2,58 @@
 //歩なら前にしか進めない。
 //ルール違反ならfalseを返す。
 function shogi_rule(koma,board81,afterX,afterY){
-
-  let beforeX = recorded.x;
-  let beforeY = recorded.y;
+  //移動前の駒のx座標、y座標
+  var beforeX = recorded.x;
+  var beforeY = recorded.y;
 
   //真っ直ぐに進んでいるならtrueを返す。
-  let straight = function(){
+  var straight = function(){
     if(beforeX === afterX && beforeY - 1 === afterY){
       return true;
     } else {return false;}
   }
   //右ならtrueを返す。
-  let right = function(){
+  var right = function(){
     if(beforeX - 1 === afterX && beforeY === afterY){
       return true;
     } else {return false;}
   }
   //右上
-  let rightup = function(){
+  var rightup = function(){
     if(beforeX - 1 === afterX && beforeY - 1 === afterY){
       return true;
     } else {return false;}
   }
   //右下
-  let rightdown = function(){
+  var rightdown = function(){
     if(beforeX - 1 === afterX && beforeY + 1 === afterY){
       return true;
     } else {return false;}
   }
-  let left = function(){
+  var left = function(){
     if(beforeX + 1 === afterX && beforeY === afterY){
       return true;
     } else {return false;}
   }
-  let leftup = function(){
+  var leftup = function(){
     if(beforeX + 1 === afterX && beforeY - 1 === afterY){
       return true;
     } else {return false;}
   }
-  let leftdown = function(){
+  var leftdown = function(){
     if(beforeX + 1 === afterX && beforeY + 1 === afterY){
       return true;
     } else {return false;}
   }
-  let goback = function(){
+  var goback = function(){
     if(beforeX  === afterX && beforeY + 1 === afterY){
       return true;
     } else {return false;}
   }
   //相手の陣地に入れば成り駒になる
-  let goteField = 3;
-  let senteField = 7;
-  let promote = function(){
+  var goteField = 3;
+  var senteField = 7;
+  var promote = function(){
     if(recorded.type <= 14){
       if(afterY <= goteField){
         return recorded.type++;
@@ -65,9 +65,9 @@ function shogi_rule(koma,board81,afterX,afterY){
     }
   }
   function choose_promote_koma(){
-    let modal = document.getElementById('modal');
-    let yes = document.getElementById('yes');
-    let no = document.getElementById('no');
+    var modal = document.getElementById('modal');
+    var yes = document.getElementById('yes');
+    var no = document.getElementById('no');
     //もーダルを出す、yesかnoを受け取る、その値がyesなら駒がなる、noなら成らない。
     modal.classList.add('hidden');
     yes.addEventListener('click' , function(){
@@ -79,24 +79,24 @@ function shogi_rule(koma,board81,afterX,afterY){
     })
   }
   function modal(){
-    let modal  = document.getElementById('modal');
-    let yes = document.getElementById('yes');
-    let no = document.getElementById('no');
+    var modal  = document.getElementById('modal');
+    var yes = document.getElementById('yes');
+    var no = document.getElementById('no');
 
     modal.classList.remove('hidden');
 
   }
   //横軸の駒を飛び越えることはできない。
   function block_jump_x(){
-    let count = Math.abs(beforeX - afterX) - 1;
+    var count = Math.abs(beforeX - afterX) - 1;
     if(beforeX > afterX){
-      for(let i = 1; count > 0; count--,i++){
+      for(var i = 1; count > 0; count--,i++){
         if(board81[beforeX - i][beforeY] !== koma.EMPTY){
             return false;
         }
       }
     }else{
-      for(let i = 1; count > 0; count--,i++){
+      for(var i = 1; count > 0; count--,i++){
         if(board81[afterX - i][beforeY] !== koma.EMPTY){
             return false;
         }
@@ -107,15 +107,15 @@ function shogi_rule(koma,board81,afterX,afterY){
 
   //縦軸の駒を飛び越えることはできない。
   function block_jump_y(){
-    let count = Math.abs(beforeY - afterY) - 1;
+    var count = Math.abs(beforeY - afterY) - 1;
     if(beforeY > afterY){
-      for(let i = 1; count > 0; count--,i++){
+      for(var i = 1; count > 0; count--,i++){
         if(board81[beforeX][beforeY - i] !== koma.EMPTY){
             return false;
         }
       }
     }else{
-      for(let i = 1; count > 0; count--,i++){
+      for(var i = 1; count > 0; count--,i++){
         if(board81[beforeX][afterY - i] !== koma.EMPTY){
             return false;
         }
@@ -126,16 +126,16 @@ function shogi_rule(koma,board81,afterX,afterY){
 
   //斜めに進む時も飛び越え不可。
   function block_jump_xy(){
-    let count = Math.abs(beforeX - afterX) - 1;
+    var count = Math.abs(beforeX - afterX) - 1;
     if(afterX - beforeX > 0){ //左側に進んでいる場合
       if(afterY - beforeY > 0){ //下側に進んでいる場合
-       for(let i = 1;count > 0;count--,i++){
+       for(var i = 1;count > 0;count--,i++){
          if(board81[beforeX + i][beforeY + i] !== koma.EMPTY){
            return false;
          }
        }
      }else{//if(afterY - beforeY > 0)上側に進んでいる場合
-       for(let i = 1;count > 0;count--,i++){
+       for(var i = 1;count > 0;count--,i++){
          if(board81[beforeX + i][beforeY - i] !== koma.EMPTY){
            return false;
          }
@@ -144,13 +144,13 @@ function shogi_rule(koma,board81,afterX,afterY){
    }
      if(afterX - beforeX < 0){   //右側に進んでいる場合
        if(afterY - beforeY > 0){ //下側に進んでいる場合
-         for(let i = 1;count > 0;count--,i++){
+         for(var i = 1;count > 0;count--,i++){
            if(board81[beforeX - i][beforeY + i] !== koma.EMPTY){
              return false;
            }
          }
        }else{//上側に進んでいる場合
-         for(let i = 1;count > 0;count--,i++){
+         for(var i = 1;count > 0;count--,i++){
            if(board81[beforeX - i][beforeY - i] !== koma.EMPTY){
              return false;
            }
@@ -208,7 +208,7 @@ function shogi_rule(koma,board81,afterX,afterY){
     }
     case koma.KAKU:
     case koma.KAKU_:{
-      let a = beforeX - afterX;
+      var a = beforeX - afterX;
       if(((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
         promote();
         break;
@@ -216,7 +216,7 @@ function shogi_rule(koma,board81,afterX,afterY){
     }
     case koma.UMA:
     case koma.UMA_:{
-      let a = beforeX - afterX;
+      var a = beforeX - afterX;
       if(straight() || right() || left() || goback() || ((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
         break;
       } else {return false;}
@@ -269,7 +269,7 @@ function shogi_rule(koma,board81,afterX,afterY){
 }//shogi_rule()
 
   function put_motigoma_rule(koma,board81,afterX,afterY){
-    let holdingKoma = recordedMotigoma.type;
+    var holdingKoma = recordedMotigoma.type;
     function nifu_check(anyoneFu){
       for(i = 1;i <= 9;i++){
         if(board81[afterX][i] === anyoneFu){

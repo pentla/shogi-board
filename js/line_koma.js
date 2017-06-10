@@ -1,11 +1,7 @@
 
-//数値は全てkomaTypeの数字。
-//0 何もないマス。 1 ~ 14 先手の駒。  15 ~ 28 後手の駒。
-//歩、香、桂、銀、角、飛車 + 1 === 成り駒。
-
 //将棋の最初の配置。
 function line_koma(koma,board81){
-  for(let i = 1;i <= 9; i++){
+  for(var i = 1;i <= 9; i++){
     board81[i][7] = koma.FU;
     board81[i][3] = koma.FU_;
   }
@@ -33,6 +29,4 @@ function line_koma(koma,board81){
   board81[8][2] = koma.HI_;
   board81[5][1] = koma.GYOKU_;
 
-  //この行なくても動くからいらないのかな？
-  return board81;
 };

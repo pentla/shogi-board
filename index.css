@@ -1,12 +1,3 @@
-/*
-駒
-width 36px height 39px
-盤
-width 36 * 9 = 324px
-駒台
-width 129px
-height 129px
-*/
 body{
   font-family:Arial, sans-serif;
   text-align:center;
@@ -111,7 +102,7 @@ p{
   z-index:3;
 }
 #close{
-  cursor:
+  cursor:pointer;
 }
 #yes, #no{
   border:1px solid #ccc;
