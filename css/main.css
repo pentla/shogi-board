@@ -7,7 +7,7 @@ body{
 main{
   width:810px;
   height:540px;
-  background:url("backimg/sg_ban.jpg");
+  background:url("../backimg/sg_ban.jpg");
   position:relative;
 }
 p{
