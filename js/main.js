@@ -1,8 +1,9 @@
 
 var KomaName = function(){
 
+    //駒がない場合
     this.EMPTY =          0;
-
+    //味方の駒
     this.FU    =          1;
     this.TO    =          2;
     this.KYO   =          3;
@@ -17,7 +18,7 @@ var KomaName = function(){
     this.KAKU  =         12;
     this.UMA   =         13;
     this.GYOKU =         14;
-
+    //敵の駒
     this.FU_   =         15;
     this.TO_   =         16;
     this.KYO_  =         17;
@@ -37,8 +38,8 @@ var KomaName = function(){
     this.senteMax =      14;
     this.goteMin  =      15;
     this.goteMax  =      28;
-    this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
-    this.narigoma = [2,4,6,8,11,13,16,18,20,22,25,27];
+    this.promote  =       1;   //歩、香、桂、銀、角、飛車 + 1 == 成り駒。
+    this.narigoma =      [2,4,6,8,11,13,16,18,20,22,25,27];
 
 };
 var koma = new KomaName();
@@ -59,8 +60,7 @@ function put_KomaPicture_to_array(komaPicture){
 put_KomaPicture_to_array(komaPicture);
 
 
-
-var board= [];
+var board = [];
 function init(board){
     for(var x = 1; x <= 9 ;x++){
         board[x] = [];
@@ -123,11 +123,12 @@ write_board_to_html(line_koma(koma,board));
 
 //駒の情報を記録する
 var RecordKoma = function(place_x ,place_y ,record_komaType, removeInfo){
-    this.x = place_x;
-    this.y = place_y;
-    this.type = record_komaType;
+    this.x          = place_x;
+    this.y          = place_y;
+    this.type       = record_komaType;
     this.removeInfo = removeInfo;
 }
+var recorded;
 
 //駒１つ１つに対するイベント設定
 function select_or_move_koma(x, y, c){
@@ -258,7 +259,7 @@ function put_to_komadai(caughtKoma){
 function komadai_appendChild(whoMotigomaArray){
 
     //駒台に表示させる
-    var thenTeban = sente;
+    var thenTeban  = sente;
     var whoKomadai = (sente)? senteKomadai : goteKomadai;
 
     while(whoKomadai.firstChild){
@@ -401,45 +402,53 @@ function shogi_rule(koma,board,afterX,afterY){
   var promote = function(){
     if(recorded.type <= 14){
       if(afterY <= goteField){
-        return recorded.type++;
+          choose_promote_koma();
+        // return recorded.type++;
       }
     } else {
       if(afterY >= senteField){
-        return recorded.type++;
+        choose_promote_koma();
+        // return recorded.type++;
       }
     }
   }
 
   //駒がなるか成らないかを選択できる(未実装)
 
-  // function choose_promote_koma(){
-  //   var modal = document.getElementById('modal');
-  //   var yes = document.getElementById('yes');
-  //   var no = document.getElementById('no');
-  //   //もーダルを出す、yesかnoを受け取る、その値がyesなら駒がなる、noなら成らない。
-  //   modal.classList.add('hidden');
-  //   yes.addEventListener('click' , function(){
-  //     recorded.type++;
-  //     write_koma();
-  //   });
-  //   no.addEventListener('click' , function(){
-  //     return;
-  //   })
-  // }
-  // function modal(){
-  //   var modal  = document.getElementById('modal');
-  //   var yes = document.getElementById('yes');
-  //   var no = document.getElementById('no');
-  //
-  //   modal.classList.remove('hidden');
-  //
-  // }
+  function choose_promote_koma(){
+    var modal = document.getElementById('modal');
+    var yes = document.getElementById('yes');
+    var no = document.getElementById('no');
+    //もーダルを出す、yesかnoを受け取る、その値がyesなら駒がなる、noなら成らない。
+    modal.classList.remove('hidden');
+    yes.addEventListener('click' , function(){
+      board[afterX][afterY] = ++recorded.type;
+      console.log('yes');
+      write_board_to_html();
+      modal.classList.add('hidden');
+    });
+    no.addEventListener('click' , function(){
+      console.log("no");
+      modal.classList.add('hidden');
+    //   write_board_to_html();
+    });
+  }
+  function modal(){
+    var modal  = document.getElementById('modal');
+    var yes = document.getElementById('yes');
+    var no = document.getElementById('no');
+
+    modal.classList.remove('hidden');
+
+  }
 
   //敵の駒を飛び越えて進むのを防ぐための関数
 
   //x軸の飛び越えがあればfalseを返す
   function block_jump_x(){
+
     var count = Math.abs(beforeX - afterX) - 1;
+
     if(beforeX > afterX){
       for(var i = 1; count > 0; count--,i++){
         if(board[beforeX - i][beforeY] !== koma.EMPTY){
@@ -458,7 +467,9 @@ function shogi_rule(koma,board,afterX,afterY){
 
   //y軸の飛び越えがあればfalseを返す
   function block_jump_y(){
+
     var count = Math.abs(beforeY - afterY) - 1;
+
     if(beforeY > afterY){
       for(var i = 1; count > 0; count--,i++){
         if(board[beforeX][beforeY - i] !== koma.EMPTY){
