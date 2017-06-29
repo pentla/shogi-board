@@ -1,8 +1,6 @@
-var KomaName = function() {
-
-	//駒がない場合
+var KomaName = function () {
 	this.EMPTY = 0;
-	//味方の駒
+
 	this.FU = 1;
 	this.TO = 2;
 	this.KYO = 3;
@@ -17,7 +15,7 @@ var KomaName = function() {
 	this.KAKU = 12;
 	this.UMA = 13;
 	this.GYOKU = 14;
-	//敵の駒
+
 	this.FU_ = 15;
 	this.TO_ = 16;
 	this.KYO_ = 17;
@@ -37,14 +35,15 @@ var KomaName = function() {
 	this.senteMax = 14;
 	this.goteMin = 15;
 	this.goteMax = 28;
-	this.promote = 1; //歩、香、桂、銀、角、飛車 + 1 == 成り駒。
+	this.promote = 1; //歩、香、桂、銀、角、飛車 + 1 === 成り駒。
 	this.narigoma = [2, 4, 6, 8, 11, 13, 16, 18, 20, 22, 25, 27];
-};
+
+}
 var koma = new KomaName();
 
 var komaPicture = [];
 
-function komaPicture_to_array(komaPicture) {
+function put_KomaPicture_to_array(komaPicture) {
 	var komaPictureList = document.getElementById('komaPictureList');
 	var child = komaPictureList.firstChild;
 	var i = 0;
@@ -56,22 +55,21 @@ function komaPicture_to_array(komaPicture) {
 		child = child.nextSibling;
 	}
 }
-komaPicture_to_array(komaPicture);
+put_KomaPicture_to_array(komaPicture);
 
 
 var board = [];
 
-function init(board) {
+function initialize_board81(board) {
 	for (var x = 1; x <= 9; x++) {
 		board[x] = [];
 		for (var y = 1; y <= 9; y++) {
 			board[x][y] = koma.EMPTY;
 		}
 	}
-}
-init(board);
+};
+initialize_board81(board);
 
-//将棋盤、駒台、テキストをhtmlから回収
 var ban = document.getElementById('ban');
 var goteKomadai = document.getElementById('goteKomadai');
 var senteKomadai = document.getElementById('senteKomadai');
@@ -79,15 +77,12 @@ var senteText = document.getElementById('senteText');
 var goteText = document.getElementById('goteText');
 goteText.classList.add('opacity');
 
-//駒をつかんでいるかどうか
 var selecting = false;
-//持ち駒をつかんでいるかどうか
 var motigomaSelecting = false;
-//先手(true)か後手(false)か
 var sente = true;
 
-//手番の入れ替え
-function change_teban() {
+//グローバル変数senteのtrue/falseを入れ替える
+function change_sente() {
 	if (sente) {
 		senteText.classList.add('opacity');
 		goteText.classList.remove('opacity');
@@ -98,18 +93,15 @@ function change_teban() {
 	sente = !sente;
 }
 
-//boardの情報をhtmlに挿入
+//9×9の盤を作成、駒の情報を入れ、htmlに挿入する
 function write_board_to_html() {
-
-	//一度にまとめたほうが描画の回数を減らせる
-	var tmpDocumentFragment = document.createDocumentFragment();
-
+	let tmpDocumentFragment = document.createDocumentFragment();
 	while (ban.firstChild) {
 		ban.removeChild(ban.firstChild);
 	}
-	for (var y = 1; y <= 9; y++) {
-		for (var x = 1; x <= 9; x++) {
-			var c;
+	for (let y = 1; y <= 9; y++) {
+		for (let x = 1; x <= 9; x++) {
+			let c;
 			c = komaPicture[board[x][y]].cloneNode(true);
 			c.style.right = ((x - 1) * 36) + 'px';
 			c.style.top = ((y - 1) * 39) + 'px';
@@ -118,29 +110,25 @@ function write_board_to_html() {
 		}
 	}
 	ban.appendChild(tmpDocumentFragment);
-}
+};
 write_board_to_html(line_koma(koma, board));
 
-//駒の情報を記録する
-var RecordKoma = function(place_x, place_y, record_komaType, removeInfo) {
+//１度目のクリックで駒の情報を記録する
+let RecordKoma = function(place_x, place_y, record_komaType, removeInfo) {
 	this.x = place_x;
 	this.y = place_y;
 	this.type = record_komaType;
 	this.removeInfo = removeInfo;
 }
-var recorded;
+var recorded, recordedMotigoma;
 
-//駒１つ１つに対するイベント設定
 function select_or_move_koma(x, y, c) {
 	c.addEventListener('click', function() {
-
-		var selectingKomaName = board[x][y];
-
+		let selectingKomaName = board[x][y];
 		if (!selecting) {
-			//盤上の駒をクリックした場合
-
-			//空白のマス、相手のマスに打つ場合は却下
+			//空白のマスは動かせない。
 			if (selectingKomaName === koma.EMPTY) return;
+			//相手の駒は動かせない。
 			if (sente) {
 				if (selectingKomaName >= koma.goteMin)
 					return;
@@ -148,56 +136,52 @@ function select_or_move_koma(x, y, c) {
 				if (selectingKomaName <= koma.senteMax)
 					return;
 			}
-
-			//選択する場合、駒の背景を赤に変え、記録する
 			c.style.background = 'red';
 			recorded = new RecordKoma(x, y, selectingKomaName, undefined);
 			selecting = true;
-
 		} else if (!motigomaSelecting) {
-			//駒を置く場所を指定するとき
-
-			//同じ場所をクリック、ルールに反している場合、却下
+			//同じ場所をクリックするなら行動キャンセル。
 			if (selectingKomaName === board[recorded.x][recorded.y]) {
 				selecting = false;
 				c.style.background = "none";
 				return;
 			}
+			//自分の駒の場所に移動することはできない。
+			if (sente) {
+				if ((1 <= selectingKomaName) && (selectingKomaName <= 14)) {
+					return;
+				}
+			} else {
+				if ((15 <= selectingKomaName) && (selectingKomaName <= 28)) {
+					return;
+				}
+			}
+			//ルールに沿っていないなら進めない。
 			if (!shogi_rule(koma, board, x, y)) {
 				return;
 			}
-
-			//移動先に駒がある場合、駒台へ
+			//移動場所に駒がいたら駒台へ。
 			if (selectingKomaName !== koma.EMPTY) {
 				put_to_komadai(selectingKomaName);
 			}
-
-			//1度目に記録した駒を移動
+			//先ほど記録した駒を移動
 			board[x][y] = recorded.type;
 			board[recorded.x][recorded.y] = koma.EMPTY;
-
-			//選択状態の解除、手番の変更、再描画
 			selecting = false;
-			change_teban();
+			change_sente();
 			write_board_to_html();
-
 		} else if (motigomaSelecting) {
-			//持ち駒をつかんだ場合
-
-			//持ち駒を置くルールに反している場合は却下
 			if (!put_motigoma_rule(koma, board, x, y)) {
 				recordedMotigoma.removeInfo.background = "none";
 				motigomaSelecting = false;
 				return;
 			}
-			//駒がある場所に打っている場合は却下
+			//駒がある場所に打つことはできない。
 			if (selectingKomaName !== koma.EMPTY) {
 				return;
 			}
-
 			//持ち駒を打って、駒台から持ち駒を消す。
-			//先手なら先手の駒台、後手なら後手の駒台へ
-			board[x][y] = recordedMotigoma.type
+			board[x][y] = recordedMotigoma.type;
 			if (sente) {
 				senteMotigomaArray.some(function(value, index) {
 					if (value === recordedMotigoma.type) {
@@ -213,33 +197,27 @@ function select_or_move_koma(x, y, c) {
 				});
 				komadai_appendChild(goteMotigomaArray);
 			}
-
-			//持ち駒の選択状態の解除
 			motigomaSelecting = false;
-
 			selecting = false;
-			change_teban();
+			change_sente();
 			write_board_to_html();
+			//打った持ち駒を盤に表示させるためもう一度表示。
 		}
 	});
 }
 
-//駒台に入っている駒の情報の管理
-var senteMotigomaArray = [];
-var goteMotigomaArray = [];
+let senteMotigomaArray = [];
+let goteMotigomaArray = [];
 
+//駒台に取られた駒を送る
 function put_to_komadai(caughtKoma) {
-
-	//取った駒が成り駒の場合、成っていない状態に戻す
-	for (var length = koma.narigoma.length; length >= 0; length--) {
+	for (let length = koma.narigoma.length; length >= 0; length--) {
 		if (koma.narigoma[length] === caughtKoma) {
 			caughtKoma--;
 			break;
 		}
 	}
-
-	//取られた駒は敵のものになる
-	var betrayKoma;
+	let betrayKoma; //取られた駒は敵に寝返る。
 	if (sente) {
 		betrayKoma = caughtKoma - 14;
 		senteMotigomaArray.push(betrayKoma);
@@ -258,19 +236,15 @@ function put_to_komadai(caughtKoma) {
 }
 
 function komadai_appendChild(whoMotigomaArray) {
-
-	//駒台に表示させる
-	var thenTeban = sente;
-	var whoKomadai = (sente) ? senteKomadai : goteKomadai;
-
+	let thenTeban = sente;
+	let whoKomadai = (sente) ? senteKomadai : goteKomadai;
 	while (whoKomadai.firstChild) {
 		whoKomadai.removeChild(whoKomadai.firstChild);
 	}
-
-	//駒台には縦３つ、横に３つ並べることができる
-	for (var length = whoMotigomaArray.length, count = 0; length > 0; length--, count++) {
-		var c = komaPicture[whoMotigomaArray[count]].cloneNode(true);
+	for (let length = whoMotigomaArray.length, count = 0; length > 0; length--, count++) {
+		let c = komaPicture[whoMotigomaArray[count]].cloneNode(true);
 		c.style.border = 'none';
+		//駒台には3*3個乗るように
 		if (count < 3) {
 			c.style.left = (count * 36) + 'px';
 		} else if (count < 6) {
@@ -280,497 +254,372 @@ function komadai_appendChild(whoMotigomaArray) {
 			c.style.left = ((count - 6) * 36) + 'px';
 			c.style.top = '78px';
 		}
-
-		//持ち駒となった際のイベントリスナの設定
 		c.addEventListener('click', function() {
-
-			//敵の駒台を使っているなら却下
+			//相手の駒を使うことはできない
 			if (thenTeban !== sente) return;
-
-			//すでに選択されている場合はもう一度クリックで解除
+			//すでに持ち駒が選択されているなら選択状態を解除
 			if (motigomaSelecting) {
 				c.style.background = 'none';
 				motigomaSelecting = false;
 				selecting = false;
 				return;
 			}
-
-			//背景を赤く換え、選択状態に移行
 			c.style.background = 'red';
 			recordedMotigoma = new RecordKoma(undefined, undefined, whoMotigomaArray[count], c);
 			selecting = true;
 			motigomaSelecting = true;
-
 		});
 		whoKomadai.appendChild(c);
 	}
 }
 
-//将棋の最初の配置。
-function line_koma(koma, board) {
-	for (var i = 1; i <= 9; i++) {
-		board[i][7] = koma.FU;
-		board[i][3] = koma.FU_;
+//数値は全てkomaTypeの数字。
+//0 何もないマス。 1 ~ 14 先手の駒。  15 ~ 28 後手の駒。
+//歩、香、桂、銀、角、飛車 + 1 === 成り駒。
+
+//将棋の初期配置。
+function line_koma(koma, board81) {
+	for (let i = 1; i <= 9; i++) {
+		board81[i][7] = koma.FU;
+		board81[i][3] = koma.FU_;
 	}
-	board[1][9] = koma.KYO;
-	board[9][9] = koma.KYO;
-	board[2][9] = koma.KEI;
-	board[8][9] = koma.KEI;
-	board[3][9] = koma.GIN;
-	board[7][9] = koma.GIN;
-	board[6][9] = koma.KIN;
-	board[4][9] = koma.KIN;
-	board[2][8] = koma.HI;
-	board[8][8] = koma.KAKU;
-	board[5][9] = koma.GYOKU;
+	board81[1][9] = koma.KYO;
+	board81[9][9] = koma.KYO;
+	board81[2][9] = koma.KEI;
+	board81[8][9] = koma.KEI;
+	board81[3][9] = koma.GIN;
+	board81[7][9] = koma.GIN;
+	board81[6][9] = koma.KIN;
+	board81[4][9] = koma.KIN;
+	board81[2][8] = koma.HI;
+	board81[8][8] = koma.KAKU;
+	board81[5][9] = koma.GYOKU;
 
-	board[1][1] = koma.KYO_;
-	board[9][1] = koma.KYO_;
-	board[2][1] = koma.KEI_;
-	board[8][1] = koma.KEI_;
-	board[3][1] = koma.GIN_;
-	board[7][1] = koma.GIN_;
-	board[6][1] = koma.KIN_;
-	board[4][1] = koma.KIN_;
-	board[2][2] = koma.KAKU_;
-	board[8][2] = koma.HI_;
-	board[5][1] = koma.GYOKU_;
-}
+	board81[1][1] = koma.KYO_;
+	board81[9][1] = koma.KYO_;
+	board81[2][1] = koma.KEI_;
+	board81[8][1] = koma.KEI_;
+	board81[3][1] = koma.GIN_;
+	board81[7][1] = koma.GIN_;
+	board81[6][1] = koma.KIN_;
+	board81[4][1] = koma.KIN_;
+	board81[2][2] = koma.KAKU_;
+	board81[8][2] = koma.HI_;
+	board81[5][1] = koma.GYOKU_;
 
-//指定された駒の移動がルール上正しいのかを判定する。
-function shogi_rule(koma, board, afterX, afterY) {
+};
+//選んだ駒を進ませるのはルール上正しいのかを判定する。
+//歩なら前にしか進めない。
+//ルール違反ならfalseを返す。
+function shogi_rule(koma,board,afterX,afterY){
 
-	//移動前の駒のx座標、y座標
-	var beforeX = recorded.x;
-	var beforeY = recorded.y;
+  var beforeX = recorded.x;
+  var beforeY = recorded.y;
 
-	//真っ直ぐに進んでいる場合trueを返す
-	var straight = function() {
-		if (beforeX === afterX && beforeY - 1 === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//右に進んでいる場合trueを返す
-	var right = function() {
-		if (beforeX - 1 === afterX && beforeY === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//右上に進んでいる場合trueを返す
-	var rightup = function() {
-		if (beforeX - 1 === afterX && beforeY - 1 === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//右下に進んでいる場合trueを返す
-	var rightdown = function() {
-		if (beforeX - 1 === afterX && beforeY + 1 === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//左に進んでいる場合trueを返す
-	var left = function() {
-		if (beforeX + 1 === afterX && beforeY === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//左上に進んでいる場合trueを返す
-	var leftup = function() {
-		if (beforeX + 1 === afterX && beforeY - 1 === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//左下に進んでいる場合trueを返す
-	var leftdown = function() {
-		if (beforeX + 1 === afterX && beforeY + 1 === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	//後ろに進んでいる場合trueを返す
-	var goback = function() {
-		if (beforeX === afterX && beforeY + 1 === afterY) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+  //真っ直ぐに進んでいるならtrueを返す。
+  var straight = function(){
+    if(beforeX === afterX && beforeY - 1 === afterY){
+      return true;
+    } else {return false;}
+  }
+  //右ならtrueを返す。
+  var right = function(){
+    if(beforeX - 1 === afterX && beforeY === afterY){
+      return true;
+    } else {return false;}
+  }
+  //右上
+  var rightup = function(){
+    if(beforeX - 1 === afterX && beforeY - 1 === afterY){
+      return true;
+    } else {return false;}
+  }
+  //右下
+  var rightdown = function(){
+    if(beforeX - 1 === afterX && beforeY + 1 === afterY){
+      return true;
+    } else {return false;}
+  }
+  var left = function(){
+    if(beforeX + 1 === afterX && beforeY === afterY){
+      return true;
+    } else {return false;}
+  }
+  var leftup = function(){
+    if(beforeX + 1 === afterX && beforeY - 1 === afterY){
+      return true;
+    } else {return false;}
+  }
+  var leftdown = function(){
+    if(beforeX + 1 === afterX && beforeY + 1 === afterY){
+      return true;
+    } else {return false;}
+  }
+  var goback = function(){
+    if(beforeX  === afterX && beforeY + 1 === afterY){
+      return true;
+    } else {return false;}
+  }
+  //相手の陣地に入れば成り駒になる
+  var goteField = 3;
+  var senteField = 7;
+  var promote = function(){
+    if(recorded.type <= 14){
+      if(afterY <= goteField){
+        return recorded.type++;
+      }
+    } else {
+      if(afterY >= senteField){
+        return recorded.type++;
+      }
+    }
+  }
+  function choose_promote_koma(){
+    var modal = document.getElementById('modal');
+    var yes = document.getElementById('yes');
+    var no = document.getElementById('no');
+    //もーダルを出す、yesかnoを受け取る、その値がyesなら駒がなる、noなら成らない。
+    modal.classList.add('hidden');
+    yes.addEventListener('click' , function(){
+      recorded.type++;
 
+      write_koma();
+    });
+    no.addEventListener('click' , function(){
+      return;
+    })
+  }
+  function modal(){
+    var modal  = document.getElementById('modal');
+    var yes = document.getElementById('yes');
+    var no = document.getElementById('no');
 
+    modal.classList.remove('hidden');
 
-	//相手の陣地に進んだ場合、駒が成ることができる
-	function promote() {
-		//相手の陣地のy座標
-		var goteField = 3;
-		var senteField = 7;
+  }
+  //横軸の駒を飛び越えることはできない。
+  function block_jump_x(){
+    var count = Math.abs(beforeX - afterX) - 1;
+    if(beforeX > afterX){
+      for(var i = 1; count > 0; count--,i++){
+        if(board[beforeX - i][beforeY] !== koma.EMPTY){
+            return false;
+        }
+      }
+    }else{
+      for(var i = 1; count > 0; count--,i++){
+        if(board[afterX - i][beforeY] !== koma.EMPTY){
+            return false;
+        }
+      }
+    }
+    return true;
+  }//block_jump_x
 
-		if (recorded.type <= 14) {
-			if (afterY <= goteField) {
-				modal();
-			}
-		} else {
-			if (afterY >= senteField) {
-				modal();
-			}
-		}
-	}
+  //縦軸の駒を飛び越えることはできない。
+  function block_jump_y(){
+    var count = Math.abs(beforeY - afterY) - 1;
+    if(beforeY > afterY){
+      for(var i = 1; count > 0; count--,i++){
+        if(board[beforeX][beforeY - i] !== koma.EMPTY){
+            return false;
+        }
+      }
+    }else{
+      for(var i = 1; count > 0; count--,i++){
+        if(board[beforeX][afterY - i] !== koma.EMPTY){
+            return false;
+        }
+      }
+    }
+    return true;
+  }//block_jump_y
 
-	//駒がなるか成らないかを選択できる
-	function modal() {
-		var modal = document.getElementById('modal');
-		var yes = document.getElementById('yes');
-		var no = document.getElementById('no');
-		//モーダルを出す、yesかnoを受け取る、その値がyesなら駒が成る、noなら成らない。
-		modal.classList.remove('hidden');
-		yes.addEventListener('click', function() {
-			board[afterX][afterY] = ++recorded.type;
-			console.log('yes');
-			write_board_to_html();
-			modal.classList.add('hidden');
-		});
-		no.addEventListener('click', function() {
-			console.log("no");
-			modal.classList.add('hidden');
-		});
-	}
+  //斜めに進む時も飛び越え不可。
+  function block_jump_xy(){
+    var count = Math.abs(beforeX - afterX) - 1;
+    if(afterX - beforeX > 0){ //左側に進んでいる場合
+      if(afterY - beforeY > 0){ //下側に進んでいる場合
+       for(var i = 1;count > 0;count--,i++){
+         if(board[beforeX + i][beforeY + i] !== koma.EMPTY){
+           return false;
+         }
+       }
+     }else{//if(afterY - beforeY > 0)上側に進んでいる場合
+       for(var i = 1;count > 0;count--,i++){
+         if(board[beforeX + i][beforeY - i] !== koma.EMPTY){
+           return false;
+         }
+       }
+     }
+   }
+     if(afterX - beforeX < 0){   //右側に進んでいる場合
+       if(afterY - beforeY > 0){ //下側に進んでいる場合
+         for(var i = 1;count > 0;count--,i++){
+           if(board[beforeX - i][beforeY + i] !== koma.EMPTY){
+             return false;
+           }
+         }
+       }else{//上側に進んでいる場合
+         for(var i = 1;count > 0;count--,i++){
+           if(board[beforeX - i][beforeY - i] !== koma.EMPTY){
+             return false;
+           }
+         }
+       }
+     }
+    return true;
+  }
+  switch(recorded.type){
+    case koma.FU:{
+      if(straight()){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.KYO:{
+      if((beforeX === afterX && beforeY > afterY) && (block_jump_y())){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.KEI:{
+      if((beforeX + 1 === afterX && beforeY - 2 === afterY)||
+         (beforeX - 1 === afterX && beforeY - 2 === afterY)){
+           promote();
+           break;
+      } else {return false;}
+    }
+    case koma.GIN:{
+      if(straight() || leftup() || leftdown() || rightup() || rightdown()){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.TO:
+    case koma.NKYO:
+    case koma.NKEI:
+    case koma.KIN:{
+      if(straight() || leftup() || left() || rightup() || right() || goback()){
+        break;
+      }else{return false;}
+    }
+    case koma.HI:
+    case koma.HI_:{
+      if((beforeX === afterX || beforeY === afterY) && (block_jump_x()) && (block_jump_y())){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.RYU:
+    case koma.RYU_:{
+      if( leftup() ||  leftdown() || rightup() || rightdown() || ((beforeX === afterX || beforeY === afterY) && (block_jump_x()) && (block_jump_y()))){
+        break;
+      } else{ return false;}
+    }
+    case koma.KAKU:
+    case koma.KAKU_:{
+      var a = beforeX - afterX;
+      if(((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.UMA:
+    case koma.UMA_:{
+      var a = beforeX - afterX;
+      if(straight() || right() || left() || goback() || ((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())){
+        break;
+      } else {return false;}
+    }
+    case koma.GYOKU:
+    case koma.GYOKU_:{
+      if(straight() || leftup() || left() || leftdown() || rightup() || right() || rightdown() || goback()){
+        break;
+      } else {return false;}
+    }
+    case koma.FU_:{
+      if(goback()){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.KYO_:{
+      if((beforeX === afterX && beforeY < afterY) && (block_jump_y())){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.KEI_:{
+      if((beforeX + 1 === afterX && beforeY + 2 === afterY)
+       ||(beforeX - 1 === afterX && beforeY + 2 === afterY)){
+           promote();
+           break;
+      } else {return false;}
+    }
+    case koma.GIN_:{
+      if(goback() || leftup() || leftdown() || rightup() || rightdown()){
+        promote();
+        break;
+      } else {return false;}
+    }
+    case koma.TO_:
+    case koma.NKEI_:
+    case koma.NKYO_:
+    case koma.KIN_:{
+      if(straight() || leftdown() || left() || rightdown() || right() || goback()){
+        break;
+      } else {return false;}
+    }
+    default:{
+      break;
+    }
+  }
+  return true;
+}//shogi_rule()
 
-	//敵の駒を飛び越えて進むのを防ぐための関数
-
-	//x軸の飛び越えがあればfalseを返す
-	function block_jump_x() {
-
-		var count = Math.abs(beforeX - afterX) - 1;
-
-		if (beforeX > afterX) {
-			for (var i = 1; count > 0; count--, i++) {
-				if (board[beforeX - i][beforeY] !== koma.EMPTY) {
-					return false;
-				}
-			}
-		} else {
-			for (var i = 1; count > 0; count--, i++) {
-				if (board[afterX - i][beforeY] !== koma.EMPTY) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	//y軸の飛び越えがあればfalseを返す
-	function block_jump_y() {
-
-		var count = Math.abs(beforeY - afterY) - 1;
-
-		if (beforeY > afterY) {
-			for (var i = 1; count > 0; count--, i++) {
-				if (board[beforeX][beforeY - i] !== koma.EMPTY) {
-					return false;
-				}
-			}
-		} else {
-			for (var i = 1; count > 0; count--, i++) {
-				if (board[beforeX][afterY - i] !== koma.EMPTY) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	//斜めに飛び越えがあればfalseを返す。
-	function block_jump_xy() {
-		var count = Math.abs(beforeX - afterX) - 1;
-
-		//左側に進んでいる際
-		if (afterX - beforeX > 0) {
-
-			//下側に進んでいる場合
-			if (afterY - beforeY > 0) {
-
-				//移動した間に駒があればfalseを返す
-				for (var i = 1; count > 0; count--, i++) {
-					if (board[beforeX + i][beforeY + i] !== koma.EMPTY) {
-						return false;
-					}
-				}
-			} else {
-				//上側に進んでいる場合
-
-				//移動する間に駒があればfalseを返す
-				for (var i = 1; count > 0; count--, i++) {
-					if (board[beforeX + i][beforeY - i] !== koma.EMPTY) {
-						return false;
-					}
-				}
-			}
-		}
-		if (afterX - beforeX < 0) { //右側に進んでいる場合
-			if (afterY - beforeY > 0) { //下側に進んでいる場合
-				for (var i = 1; count > 0; count--, i++) {
-					if (board[beforeX - i][beforeY + i] !== koma.EMPTY) {
-						return false;
-					}
-				}
-			} else { //上側に進んでいる場合
-				for (var i = 1; count > 0; count--, i++) {
-					if (board[beforeX - i][beforeY - i] !== koma.EMPTY) {
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
-
-	//駒ごとに進むことのできる場所を設定する
-	switch (recorded.type) {
-
-		//歩の場合
-		case koma.FU:
-			{
-				if (straight()) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.KYO:
-			{
-				if ((beforeX === afterX && beforeY > afterY) && (block_jump_y())) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.KEI:
-			{
-				if ((beforeX + 1 === afterX && beforeY - 2 === afterY) ||
-					(beforeX - 1 === afterX && beforeY - 2 === afterY)) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.GIN:
-			{
-				if (straight() || leftup() || leftdown() || rightup() || rightdown()) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-			//と金、成香、成桂、金は同じ
-		case koma.TO:
-		case koma.NKYO:
-		case koma.NKEI:
-		case koma.KIN:
-			{
-				if (straight() || leftup() || left() || rightup() || right() || goback()) {
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.HI:
-		case koma.HI_:
-			{
-				if ((beforeX === afterX || beforeY === afterY) && (block_jump_x()) && (block_jump_y())) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.RYU:
-		case koma.RYU_:
-			{
-				if (leftup() || leftdown() || rightup() || rightdown() || ((beforeX === afterX || beforeY === afterY) && (block_jump_x()) && (block_jump_y()))) {
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.KAKU:
-		case koma.KAKU_:
-			{
-				var a = beforeX - afterX;
-				if (((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.UMA:
-		case koma.UMA_:
-			{
-				var a = beforeX - afterX;
-				if (straight() || right() || left() || goback() || ((a === beforeY - afterY) || (a === afterY - beforeY)) && (block_jump_xy())) {
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.GYOKU:
-		case koma.GYOKU_:
-			{
-				if (straight() || leftup() || left() || leftdown() || rightup() || right() || rightdown() || goback()) {
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.FU_:
-			{
-				if (goback()) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.KYO_:
-			{
-				if ((beforeX === afterX && beforeY < afterY) && (block_jump_y())) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.KEI_:
-			{
-				if ((beforeX + 1 === afterX && beforeY + 2 === afterY) ||
-					(beforeX - 1 === afterX && beforeY + 2 === afterY)) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.GIN_:
-			{
-				if (goback() || leftup() || leftdown() || rightup() || rightdown()) {
-					promote();
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		case koma.TO_:
-		case koma.NKEI_:
-		case koma.NKYO_:
-		case koma.KIN_:
-			{
-				if (straight() || leftdown() || left() || rightdown() || right() || goback()) {
-					break;
-				} else {
-					return false;
-				}
-			}
-
-		default:
-			{
-				console.log("koma is not resistered");
-				break;
-			}
-	}
-	return true;
-}
-
-function put_motigoma_rule(koma, board, afterX, afterY) {
-	var holdingKoma = recordedMotigoma.type;
-
-	function nifu_check(Fu) {
-		for (var i = 1; i <= 9; i++) {
-			if (board[afterX][i] === Fu) {
-				return false;
-			}
-		}
-		return true;
-	}
-	//歩や香車は１段目、桂馬は１、２段目に置くことができない。
-	switch (holdingKoma) {
-		case koma.FU:
-			{
-				if ((afterY !== 1) && nifu_check(koma.FU)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		case koma.KYO:
-			{
-				if (afterY !== 1) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		case koma.KEI:
-			{
-				if ((afterY !== 1) && (afterY !== 2)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		case koma.FU_:
-			{
-				if ((afterY !== 9) && nifu_check(koma.FU_)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		case koma.KYO_:
-			{
-				if ((afterY !== 9) && (afterY !== 8)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		case koma.KEI_:
-			{
-				if ((afterY !== 9) && (afterY !== 8)) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-	}
-	return true;
+  function put_motigoma_rule(koma,board,afterX,afterY){
+    var holdingKoma = recordedMotigoma.type;
+    function nifu_check(anyoneFu){
+      for(i = 1;i <= 9;i++){
+        if(board[afterX][i] === anyoneFu){
+          return false;
+        }
+      }
+      return true;
+    }
+    //歩や香車は１段目、桂馬は１、２段目に置くことができない。
+    switch(holdingKoma){
+      case koma.FU:{
+        if((afterY !== 1) && nifu_check(koma.FU)) {
+          return true;
+        }else {return false;}
+      }
+      case koma.KYO:{
+        if(afterY !== 1) {
+          return true;
+        } else {return false;}
+      }
+      case koma.KEI:{
+        if((afterY !== 1) && (afterY !== 2)){
+          return true;
+        } else {return false;}
+      }
+      case koma.FU_:{
+        if((afterY !== 9) && nifu_check(koma.FU_)){
+          return true;
+        } else {return false;}
+      }
+      case koma.KYO_:{
+        if((afterY !== 9) && (afterY !== 8)){
+          return true;
+        } else {return false;}
+      }
+      case koma.KEI_:{
+        if((afterY !== 9) && (afterY !== 8)){
+          return true;
+        } else {return false;}
+      }
+  }
+  return true;
 }

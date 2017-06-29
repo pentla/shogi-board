@@ -1,5 +1,6 @@
-/node_modules/
 
-.eslintrc.js
-
+memo/
+test/
+node_modules/
 package.json
+.eslintrc.json
