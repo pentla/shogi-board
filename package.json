@@ -1,0 +1,19 @@
+{
+  "name": "shogiboard1.1",
+  "version": "1.0.0",
+  "description": "shogi board from javascript",
+  "main": "js/src/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/browserify js/src/index.js -t babelify -o js/dist/main.js"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babelify": "^8.0.0",
+    "browserify": "^14.5.0",
+    "gulp": "^3.9.1"
+  }
+}
