@@ -1,75 +1,36 @@
 <!DOCTYPE html>
-<html lang="ja">
-
-<head>
-	<meta charset="utf-8">
-	<title>javascript将棋盤ver.github</title>
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="shortcut icon" href="favicon.ico">
-</head>
-
-<body>
-	<p id="text">
-		ソース:<a href="https://github.com/watikuka/shogi-board">https://github.com/watikuka/shogi-board</a>
-	</p>
-	<span style="display:none;" id="komaPictureList">
-		<!-- 空白マス -->
-		<div class="koma my"id="square"></div>
-		<!-- 味方の駒 -->
-		<div class="koma my"id="fu" ><img src="koma/fu.png"></div>
-		<div class="koma my"id="to" ><img src="koma/to.png"></div>
-		<div class="koma my"id="kyo" ><img src="koma/kyo.png"></div>
-		<div class="koma my"id="nkyo" ><img src="koma/nkyo.png"></div>
-		<div class="koma my"id="kei" ><img src="koma/kei.png" ></div>
-		<div class="koma my"id="nkei" ><img src="koma/nkei.png"></div>
-		<div class="koma my"id="gin" ><img src="koma/gin.png"></div>
-		<div class="koma my"id="ngin" ><img src="koma/ngin.png"></div>
-		<div class="koma my"id="kin" ><img src="koma/kin.png"></div>
-		<div class="koma my"id="hi" ><img src="koma/hi.png"></div>
-		<div class="koma my"id="ryu" ><img src="koma/ryu.png"></div>
-		<div class="koma my"id="kaku" ><img src="koma/kaku.png"></div>
-		<div class="koma my"id="uma" ><img src="koma/uma.png"></div>
-		<div class="koma my"id="gyoku" ><img src="koma/gyoku.png"></div>
-		<!-- 敵の駒 -->
-		<div class="koma teki"id="tfu" ><img src="koma/fu_.png"></div>
-		<div class="koma teki"id="tto" ><img src="koma/to_.png"></div>
-		<div class="koma teki"id="tkyo" ><img src="koma/kyo_.png"></div>
-		<div class="koma teki"id="tnkyo" ><img src="koma/nkyo_.png"></div>
-		<div class="koma teki"id="tkei" ><img src="koma/kei_.png" ></div>
-		<div class="koma teki"id="tnkei" ><img src="koma/nkei_.png"></div>
-		<div class="koma teki"id="tgin" ><img src="koma/gin_.png"></div>
-		<div class="koma teki"id="tngin" ><img src="koma/ngin_.png"></div>
-		<div class="koma teki"id="tkin" ><img src="koma/kin_.png"></div>
-		<div class="koma teki"id="thi" ><img src="koma/hi_.png"></div>
-		<div class="koma teki"id="tryu" ><img src="koma/ryu_.png"></div>
-		<div class="koma teki"id="tkaku" ><img src="koma/kaku_.png"></div>
-		<div class="koma teki"id="tuma" ><img src="koma/uma_.png"></div>
-		<div class="koma teki"id="tgyoku" ><img src="koma/ou_.png"></div>
-	</span>
-	<main>
-		<span id="container">
-			<div class="textbox" id="textbox1">
-				<p id="senteText">▲先手</p>
-			</div>
-			<div class="komadai" id="goteKomadai"></div>
-			<div id="ban_shape">
-				<div id="ban"></div>
-			</div>
-			<div class="komadai" id="senteKomadai"></div>
-			<div class="textbox" id="textbox2">
-				<p id="goteText">▽後手</p>
-			</div>
-		</span>
-		<div id="modal" class="hidden">
-			成りますか？
-			<div id="close">
-				<div id="yes">yes</div>
-				<div id="no">no</div>
-			</div>
-		</div>
-		<div id="">
-		</div>
-	</main>
-	<script type="text/javascript" src="js/main.js"></script>
-</body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>shogiboard</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <!-- 将棋盤 -->
+    <main>
+      <div class="container">
+        <div class="textbox" id="textbox-top">
+          <p id="text-sente">▲先手</p>
+        </div>
+        <div class="komadai" id="komadai-gote"></div>
+        <div id="ban-position">
+          <div id="ban"></div>
+        </div>
+        <div class="komadai" id="komadai-sente"></div>
+        <div class="textbox" id="textbox-bottom">
+          <p id="text-gote">△後手</p>
+        </div>
+      </div>
+    </main>
+    <!-- モーダル(最初は非表示) -->
+    <div class="modal hidden">
+      成りますか？
+      <div id="modal-btn">
+        <div class="modal-option">yes</div>
+        <div class="modal-option">no</div>
+      </div>
+    </div>
+    <script type="text/javascript" src="lib/preloadjs-0.6.2.min.js"></script>
+    <script type="text/javascript" src="js/dist/main.js"></script>
+  </body>
 </html>
