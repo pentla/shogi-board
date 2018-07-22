@@ -10,6 +10,4 @@ npm install
 npm run build
 ```
 
-Mainfile(main.js) is built.
-
-Then, open index.html in browser.
+Open index.html in browser.
