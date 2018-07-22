@@ -72,7 +72,7 @@ Board.prototype.init = function() {
         {"id": "13", src: "uma.png"},
         {"id": "14", src: "ou.png"}
     ];
-    this.m.loader = new createjs.LoadQueue(false, "./img/");
+    this.m.loader = new createjs.LoadQueue(false, `${__dirname}/img`);
 
     //  読み込み終了時にrender()を走らせる
     this.m.loader.addEventListener("complete", this.render.bind(this));
