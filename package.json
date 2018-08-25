@@ -1,28 +1,26 @@
 {
-  "name": "shogiboard1.1",
+  "name": "shogiboard",
   "version": "1.0.0",
-  "description": "shogi board from javascript",
   "main": "js/src/index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "browserify js/src/index.js -t babelify -o js/dist/main.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/watikuka/shogiBoard1.1.git"
-  },
-  "author": "watikuka",
+  "author": "watkazuki",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/watikuka/shogiBoard1.1/issues"
-  },
-  "homepage": "https://github.com/watikuka/shogiBoard1.1#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
     "babelify": "^8.0.0",
-    "browserify": "^16.2.2"
-  }
+    "browserify": "^16.2.2",
+    "css-loader": "^1.0.0",
+    "file-loader": "^1.1.11",
+    "style-loader": "^0.21.0",
+    "webpack": "^4.16.1",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "dependencies": {}
 }
