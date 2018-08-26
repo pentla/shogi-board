@@ -30,7 +30,9 @@ class Koma {
       x: 0,
       y: 0
     };
-    this.owner = 'sente';
+    this.type = 'fu';
+    this.owner = 'sente'; 
+    this.isPromoted = false;
   }
 }
 

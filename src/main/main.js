@@ -1,4 +1,4 @@
-const rule = require('./rule');
+const rule = require('./rule/rule');
 
 function Board() { this.init() };
 
