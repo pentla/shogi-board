@@ -1,11 +1,8 @@
 {
   "name": "shogiboard",
   "version": "1.0.0",
-  "main": "js/src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify js/src/index.js -t babelify -o js/dist/main.js"
-  },
+  "main": "src/index.js",
+  "scripts": {},
   "author": "watkazuki",
   "license": "ISC",
   "devDependencies": {
@@ -13,11 +10,9 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.2",
     "css-loader": "^1.0.0",
-    "file-loader": "^1.1.11",
-    "style-loader": "^0.21.0",
+    "file-loader": "^2.0.0",
+    "style-loader": "^0.22.1",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.4"
