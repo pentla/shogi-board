@@ -1,6 +1,6 @@
 export default function promote(type) {
   switch(type) {
-    case 'fu': return 'fu';
+    case 'fu': return 'to';
     case 'kei': return 'nkei';
     case 'kyo': return 'nkyo';
     case 'gin': return 'ngin';
