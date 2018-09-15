@@ -16,15 +16,19 @@ module.exports = {
         use: [{
           loader: 'babel-loader',
           options: {
-            presets: ['env']
+            presets: ['@babel/env']
           }
         }],
         exclude: /node_modules/
       },
       {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
         test: /\.css$/,
         use: [
-          { loader: 'style-laoder' },
+          { loader: 'style-loader' },
           { loader: 'css-loader' },
         ]
       },
