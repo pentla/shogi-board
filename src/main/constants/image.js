@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import fu from '../assets/img/fu.png';
 import kei from '../assets/img/kei.png';
 import nkei from '../assets/img/nkei.png';
