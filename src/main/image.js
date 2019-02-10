@@ -6,7 +6,7 @@ import nKyo from '../assets/img/nkyo.png';
 import Gin from '../assets/img/gin.png';
 import nGin from '../assets/img/ngin.png';
 import Kin from '../assets/img/kin.png';
-import Hisya from '../assets/img/hi.png';
+import Hisha from '../assets/img/hi.png';
 import Ryu from '../assets/img/ryu.png';
 import Kaku from '../assets/img/kaku.png';
 import Uma from '../assets/img/uma.png';

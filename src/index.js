@@ -1,4 +1,5 @@
 import img from './main/image';
 import './assets/css/style.css';
+import Board from './main/main';
 
-console.log(img.Fu);
+const Game = new Board();

@@ -24,7 +24,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          { loader: 'style-laoder' },
+          { loader: 'style-loader' },
           { loader: 'css-loader' }
         ]
       },
@@ -38,10 +38,5 @@ module.exports = {
         }]
       }
     ]
-  },
-  resolve: {
-    alias: {
-      '@img': `${__dirname}/src/assets/img`
-    }
   }
 }

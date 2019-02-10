@@ -1,6 +1,6 @@
-const rule = require('./rule');
+import rule from './rule';
 
-function Board() { this.init() };
+export default function Board() { this.init() };
 
 //  エラー: 駒を取った際
 //  -> accessibleが削除されていないのが原因
@@ -465,5 +465,3 @@ Board.prototype.pickFromPieceStand = function(e_, piece_) {
     this.stat.phase_captured = true;
     //  todo: stat.phase_select か stat.phase_captured のどちらかだけで良い
 };
-
-const Game = new Board();
