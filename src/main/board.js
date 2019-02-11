@@ -1,4 +1,5 @@
-import rule from './rule';
+import Rule from './rule';
+import Images from './image'
 
 export default function Board() { this.init() };
 
@@ -41,7 +42,10 @@ Board.prototype.init = function() {
 
         //  駒台
         piecestand_sente: [],           //  先手の持ち駒
-        piecestand_gote: []            //  後手の持ち駒
+        piecestand_gote: [],            //  後手の持ち駒
+
+        //  駒
+        pieces: []
     };
 
     //  駒の配置の初期化
@@ -55,28 +59,25 @@ Board.prototype.init = function() {
         this.dom.txt_sente.classList.add('half_transparent');
     }
 
-    //  駒の画像読み込み(preloadjs)
-    const manifest = [
-        {"id": "1", src: "fu.png"},
-        {"id": "2", src: "to.png"},
-        {"id": "3", src: "kyo.png"},
-        {"id": "4", src: "nkyo.png"},
-        {"id": "5", src: "kei.png"},
-        {"id": "6", src: "nkei.png"},
-        {"id": "7", src: "gin.png"},
-        {"id": "8", src: "ngin.png"},
-        {"id": "9", src: "kin.png"},
-        {"id": "10", src: "hi.png"},
-        {"id": "11", src: "ryu.png"},
-        {"id": "12", src: "kaku.png"},
-        {"id": "13", src: "uma.png"},
-        {"id": "14", src: "ou.png"}
+    //  駒の画像
+    this.m.pieces = [
+        {"id": "1", src: Images.Fu},
+        {"id": "2", src: Images.To},
+        {"id": "3", src: Images.Kyo},
+        {"id": "4", src: Images.nKyo},
+        {"id": "5", src: Images.Kei},
+        {"id": "6", src: Images.nKei},
+        {"id": "7", src: Images.Gin},
+        {"id": "8", src: Images.nGin},
+        {"id": "9", src: Images.Kin},
+        {"id": "10", src: Images.Hisya},
+        {"id": "11", src: Images.Ryu},
+        {"id": "12", src: Images.Kaku},
+        {"id": "13", src: Images.Uma},
+        {"id": "14", src: Images.Gyoku}
     ];
-    this.m.loader = new createjs.LoadQueue(false, `${__dirname}/img`);
 
-    //  読み込み終了時にrender()を走らせる
-    this.m.loader.addEventListener("complete", this.render.bind(this));
-    this.m.loader.loadManifest(manifest, true);
+    this.render()
 };
 
 //  配列で盤の情報を管理
@@ -165,8 +166,13 @@ Board.prototype.render = function() {
             piece_type = String(this.stat.position[x][y].type - 15);
         }
 
+        
         //  駒の画像ノードを作成する
-        piece = piece || this.m.loader.getResult(piece_type).cloneNode(false);
+        const pieceImage = this.m.pieces.find(piece => piece.id === piece_type)
+        if (pieceImage) {
+            piece = document.createElement('img')
+            piece.src = pieceImage.src
+        }
         piece.style.top = (this.m.PIECE_HEIGHT * y) + 'px';
         piece.style.left = (this.m.PIECE_WIDTH * x) + 'px';
         piece.classList.add('koma', piece_owner);
@@ -207,7 +213,8 @@ Board.prototype.render = function() {
 
             //  駒の画像ノードを作成
             const piece_type = String(this.stat.piecestand_sente[index].type);
-            let piece = this.m.loader.getResult(piece_type).cloneNode(false);
+            let piece = document.createElement('img')
+            piece.src = this.m.pieces.find(piece => piece.id === piece_type).src
 
             piece.classList.add('koma', 'sente');
             if (this.stat.piecestand_sente[index].style)
@@ -260,7 +267,8 @@ Board.prototype.render = function() {
 
             const piece_type = String(this.stat.piecestand_gote[index].type - 15);
             //  駒の画像のノードを作成
-            let piece = this.m.loader.getResult(piece_type).cloneNode(false);
+            let piece = document.createElement('img')
+            piece.src = this.m.pieces.find(piece => piece.id === piece_type).src
             piece.classList.add('koma', 'gote');
             if (this.stat.piecestand_gote[index].style)
                 piece.classList.add(this.stat.piecestand_gote[index].style);
@@ -328,7 +336,7 @@ Board.prototype.run = function(e_, piece_) {
         destination.style = 'red';
 
         //  進むことのできる場所のスタイルを変更する(rule.js)
-        const accesible = rule.listAccesible(this.stat.position, piece_);
+        const accesible = Rule(this.stat.position, piece_);
         accesible.forEach( value_ => {
             this.stat.position[value_[0]][value_[1]].style = 'orange';
             this.stat.position[value_[0]][value_[1]].accesible = true;
@@ -453,7 +461,7 @@ Board.prototype.pickFromPieceStand = function(e_, piece_) {
     this.stat.picked = piece_;
 
     //  piecestandをオブジェクト形式で
-    let piecestand = (owner === 'sente') ? this.stat.piecestand_sente : this.stat.piecestand_gote;
+    let piecestand = (piece_.owner === 'sente') ? this.stat.piecestand_sente : this.stat.piecestand_gote;
     piecestand[piecestand.index] = {
         type: piece_.type,
         style: 'red'

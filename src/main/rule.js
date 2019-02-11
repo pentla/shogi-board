@@ -1,6 +1,6 @@
 
 //  指定された駒の情報、全体の駒の位置をもとに進める場所を配列として返す。
-exports.listAccesible = function(pos_, piece_obj_) {
+export default function(pos_, piece_obj_) {
 
     /*
     argument
