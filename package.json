@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server",
-    "build": "browserify js/src/index.js -t babelify -o js/dist/main.js"
+    "build": "webpack"
   },
   "author": "watkazuki",
   "license": "ISC",

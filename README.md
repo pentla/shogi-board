@@ -16,3 +16,5 @@ npm run build
 ```
 
 Open index.html in browser.
+
+`https://watkazuki.github.io/shogi-board/`
