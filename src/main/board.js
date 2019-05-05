@@ -1,5 +1,6 @@
 import Rule from './rule';
-import Images from './image'
+import Images from './image';
+import Constants from './constants'
 
 export default function Board() { this.init() };
 
@@ -416,7 +417,7 @@ Board.prototype.bringPieceStand = function(piece_) {
     // };
 
     //  成り駒であれば戻す
-    const promotion_list = [2, 4, 6, 8, 11, 13, 17, 19, 21, 23, 26, 28];
+    const promotion_list = Constants.promotionedList;
     for (let a in promotion_list) {
         if (piece_.type === promotion_list[a]) {
             piece_type--;
