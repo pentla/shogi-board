@@ -9,12 +9,10 @@ p {
     font-size: 14px;
 }
 
-
 /* utility */
 .hidden {
     display: none;
 }
-
 
 /* adjusting position */
 .container {
@@ -79,6 +77,9 @@ p {
     position: absolute;
     border: 0;
 }
+.koma:hover {
+    background: #fbd92d;
+}
 .koma img {
     filter: drop-shadow(1px 1px rgba(0,0,0,0.6));
 }
@@ -113,5 +114,8 @@ p {
     opacity: .5;
 }
 .red {
+    background: red;
+}
+.red:hover {
     background: red;
 }

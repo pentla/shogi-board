@@ -38,7 +38,7 @@ Board.prototype.init = function() {
         turn_list: ['sente', 'gote'],   //  使う？ todo: 消すかどうか決める
         turn: 'sente',                  //  手番
         phase_select: false,            //  駒が選択されたかどうか
-        captured_select: false,         //  持ち駒が選択されたかどうか
+        phase_captured: false,         //  持ち駒が選択されたかどうか
 
         //  駒台
         piecestand_sente: [],           //  先手の持ち駒
@@ -166,7 +166,6 @@ Board.prototype.render = function() {
             piece_type = String(this.stat.position[x][y].type - 15);
         }
 
-        
         //  駒の画像ノードを作成する
         const pieceImage = this.m.pieces.find(piece => piece.id === piece_type)
         if (pieceImage) {
@@ -293,7 +292,7 @@ Board.prototype.render = function() {
             //  クリック時のイベントを作成
             piece.addEventListener('click', () => {
                 const piece_info = {
-                    type: this.stat.piecestand_gote[index],
+                    type: this.stat.piecestand_gote[index].type,
                     owner: 'gote',
                     index: index
                 };
@@ -341,20 +340,23 @@ Board.prototype.run = function(e_, piece_) {
             this.stat.position[value_[0]][value_[1]].style = 'orange';
             this.stat.position[value_[0]][value_[1]].accesible = true;
         });
-
     }
     //  駒が選択された状態
     else {
 
-        //  移動可能な場所のみ選択可
-        if (!destination.accesible) {
-            this.stat.phase_select = false;
-            this.render();
-            return;
-        }
+        //  持ち駒を利用しない場合は進める場所のみ進める
+        if (!this.stat.phase_captured) {
 
-        //  進んだ先に駒がある場合は駒台へ
-        if (destination.type) this.bringPieceStand(piece_);
+            //  移動可能な場所のみ選択可
+            if (!destination.accesible) {
+                this.stat.phase_select = false;
+                this.render();
+                return;
+            }
+
+            //  進んだ先に駒がある場合は駒台へ
+            if (destination.type) this.bringPieceStand(piece_);
+        }
 
         //  駒を移動
         destination.type = this.stat.picked.type;
@@ -363,7 +365,7 @@ Board.prototype.run = function(e_, piece_) {
         if (this.stat.phase_captured) {
             const piece_stand = (this.stat.turn === 'sente') ? this.stat.piecestand_sente : this.stat.piecestand_gote;
             for (let index in piece_stand) {
-                if (piece_stand[index] === this.stat.picked.type) {
+                if (piece_stand[index].type === this.stat.picked.type) {
                     piece_stand.splice(index, 1);
                     break;
                 }
@@ -382,7 +384,6 @@ Board.prototype.run = function(e_, piece_) {
         this.dom.txt_gote.classList.toggle('half_transparent');
         this.dom.txt_sente.classList.toggle('half_transparent');
         this.stat.turn = (this.stat.turn === 'sente') ? 'gote' : 'sente';
-
     }
 
     //  盤の状態の更新
@@ -391,7 +392,7 @@ Board.prototype.run = function(e_, piece_) {
     this.stat.phase_select = !this.stat.phase_select;
 };
 
-//  駒台のタッチイベント
+//  取った駒を駒台に乗せる
 Board.prototype.bringPieceStand = function(piece_) {
 
     //  argument
@@ -403,7 +404,6 @@ Board.prototype.bringPieceStand = function(piece_) {
     // };
 
     //  成り駒であれば戻す
-    //  todo: マジックナンバを減らす
     const promotion_list = [2, 4, 6, 8, 11, 13, 17, 19, 21, 23, 26, 28];
     for (let a in promotion_list) {
         if (piece_.type === promotion_list[a]) {
@@ -462,7 +462,7 @@ Board.prototype.pickFromPieceStand = function(e_, piece_) {
 
     //  piecestandをオブジェクト形式で
     let piecestand = (piece_.owner === 'sente') ? this.stat.piecestand_sente : this.stat.piecestand_gote;
-    piecestand[piecestand.index] = {
+    piecestand[piecestand.length-1] = {
         type: piece_.type,
         style: 'red'
     };
@@ -471,5 +471,6 @@ Board.prototype.pickFromPieceStand = function(e_, piece_) {
     this.stat.phase_select = true;
     //  持ち駒の選択状態に移行
     this.stat.phase_captured = true;
-    //  todo: stat.phase_select か stat.phase_captured のどちらかだけで良い
+
+    this.render()
 };
