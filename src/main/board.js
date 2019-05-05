@@ -239,7 +239,7 @@ Board.prototype.render = function() {
             //  クリック時のイベントを作成
             piece.addEventListener('click', () => {
                 let piece_info = {
-                    type: this.stat.piecestand_sente[index],
+                    type: this.stat.piecestand_sente[index].type,
                     owner: 'sente',
                     index: index
                 }
@@ -356,13 +356,21 @@ Board.prototype.run = function(e_, piece_) {
 
             //  進んだ先に駒がある場合は駒台へ
             if (destination.type) this.bringPieceStand(piece_);
+
+            //  駒がもともといた場所を初期化
+            const departure = this.stat.position[this.stat.picked.x][this.stat.picked.y];
+            departure.type = 0;
+            departure.style = "";
+            departure.accesible = false;
         }
 
-        //  駒を移動
-        destination.type = this.stat.picked.type;
-
-        //  持ち駒を利用しているなら、持ち駒から駒を削除する
+        //  持ち駒を利用しているなら
         if (this.stat.phase_captured) {
+
+            //  置くところに駒があるなら拒否
+            if (destination.type) return;
+
+            //  持ち駒から駒を削除する
             const piece_stand = (this.stat.turn === 'sente') ? this.stat.piecestand_sente : this.stat.piecestand_gote;
             for (let index in piece_stand) {
                 if (piece_stand[index].type === this.stat.picked.type) {
@@ -372,13 +380,17 @@ Board.prototype.run = function(e_, piece_) {
             }
             this.stat.phase_captured = false;
         }
-        //  駒が移動しているなら、駒が元々いた場所を初期化する
-        else {
-            const departure = this.stat.position[this.stat.picked.x][this.stat.picked.y];
-            departure.type = 0;
-            departure.style = "";
-            departure.accesible = false;
-        }
+
+        //  駒を移動
+        destination.type = this.stat.picked.type;
+
+        //  すべての場所のaccesibleを無効にする
+        this.stat.position = this.stat.position.map(row => {
+            return row.map(piece => {
+                if (piece) piece.accesible = false
+                return piece
+            })
+        })
 
         //  先手・後手の入れ替え
         this.dom.txt_gote.classList.toggle('half_transparent');
