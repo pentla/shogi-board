@@ -2,7 +2,7 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js',
   output: {
-    filename: 'main.js',
+    filename: 'shogi.js',
     path: `${__dirname}/dist`
   },
   devServer: {
@@ -33,7 +33,7 @@ module.exports = {
         use: [{
           loader: 'file-loader',
           options: {
-            name: 'assets/[name].[ext]?[hash]'
+            name: 'shogi/[name].[ext]?[hash]'
           }
         }]
       }
