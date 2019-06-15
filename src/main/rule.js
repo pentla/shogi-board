@@ -222,7 +222,7 @@ export default function(pos_, piece_obj_) {
 };
 
 //  todo: 完成させる
-exports.forPieceStand = function(pos_, picked_obj_) {
+const forPieceStand = function(pos_, picked_obj_) {
 
     /*
     argument
