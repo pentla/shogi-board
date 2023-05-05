@@ -15,15 +15,15 @@ describe('validateBoard', () => {
   it('盤面の横の長さが不正な場合、エラーが返ること', () => {
     // 9*1の盤面
     const board = [
-      [{ x: 0, y: 0, piece: null }],
-      [{ x: 1, y: 0, piece: null }],
-      [{ x: 2, y: 0, piece: null }],
-      [{ x: 3, y: 0, piece: null }],
-      [{ x: 4, y: 0, piece: null }],
-      [{ x: 5, y: 0, piece: null }],
-      [{ x: 6, y: 0, piece: null }],
-      [{ x: 7, y: 0, piece: null }],
-      [{ x: 8, y: 0, piece: null }],
+      [{ x: 0, y: 0, pieceState: null }],
+      [{ x: 1, y: 0, pieceState: null }],
+      [{ x: 2, y: 0, pieceState: null }],
+      [{ x: 3, y: 0, pieceState: null }],
+      [{ x: 4, y: 0, pieceState: null }],
+      [{ x: 5, y: 0, pieceState: null }],
+      [{ x: 6, y: 0, pieceState: null }],
+      [{ x: 7, y: 0, pieceState: null }],
+      [{ x: 8, y: 0, pieceState: null }],
     ]
     const result = validateBoard(board)
     expect(result.ok).toBe(false)

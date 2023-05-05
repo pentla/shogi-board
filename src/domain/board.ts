@@ -42,8 +42,8 @@ export const getEmptyBoard = (): Position => {
     const row: CellState[] = []
     for (let j = 0; j < 9; j++) {
       const cell: CellState = {
-        x: i,
-        y: j,
+        x: j,
+        y: i,
         pieceState: null,
       }
       row.push(cell)
@@ -51,4 +51,12 @@ export const getEmptyBoard = (): Position => {
     board.push(row)
   }
   return board
+}
+
+/*
+ 76歩、のような形x,y形式の座標から、実際にboardに指定する際の座標を取得する。
+ 結果を利用する際はboard[x][y]のように扱う。
+*/
+export const convertBoardPoint = (x: number, y: number): [number, number] => {
+  return [x - 1, y - 1]
 }

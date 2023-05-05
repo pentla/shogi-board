@@ -1,30 +1,24 @@
 
-/* utility */
-.hidden {
-    display: none;
-}
-
 /* adjusting position */
-.container {
+/* .container {
     position: relative;
     width: 810px;
     height: 540px;
-    background: url("../img/sg_ban.jpg");
-}
+} */
 
 
 /* ban */
-#ban-position {
+/* #ban-position {
     position: absolute;
     top: 86px;
     left: 243.5px;
     width: 324px;
     height: 351px;
-}
+} */
 
 
 /* komadai */
-.komadai {
+/* .komadai {
     position: absolute;
     width: 120px;
     height: 120px;
@@ -37,11 +31,11 @@
 #komadai-gote {
     top: 70px;
     left: 107px;
-}
+} */
 
 
 /*textbox*/
-.textbox {
+/* .textbox {
     position: absolute;
     bottom: 0;
     width: 120px;
@@ -56,7 +50,7 @@
 .textbox#textbox-bottom {
     top: 60px;
     right: 54px;
-}
+} */
 .textbox .half_transparent {
     opacity: .3;
 }
@@ -79,25 +73,6 @@
     -webkit-transform: rotate(-200deg);
 }
 
-
-/* modal */
-#modal {
-    width: 300px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 4px;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    left: 0;
-    transition:.4s;
-    z-index: 3;
-}
-#modal-option {
-    padding: 20px;
-    border: 1px solid #ccc;
-}
 
 
 /* color */

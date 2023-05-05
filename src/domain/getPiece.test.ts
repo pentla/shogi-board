@@ -1,4 +1,4 @@
-import { getPiece } from './piece';
+import { getPiece } from './getPiece';
 import { describe, expect, it } from 'vitest';
 
 describe('getPiece', () => {
