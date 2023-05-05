@@ -6,10 +6,15 @@ export type Game = {
   */
   board: Position
 
-  /*
-    現在の手番。先手=1 or 後手=2
-  */
+  // 現在の手番。先手=1 or 後手=2
   turn: Turn
+
+  /*
+   選択中の駒。
+   盤にある駒、または持ち駒を選択したときに当該のcellStateが入る。
+   未選択状態、または駒を指したあとはnullになる
+  */
+  selectedPiece: CellState | null
 
   // 先手の持ち駒
   firstPlayerCapturedPieces: PieceState[]
@@ -42,9 +47,6 @@ export type PieceState = {
 
   // 成っているかどうか
   isPromoted: boolean
-
-  // 選択されているかどうか
-  isSelected: boolean
 
   // 持ち主(先手 or 後手)
   owner: Turn

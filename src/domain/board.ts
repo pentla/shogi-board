@@ -22,7 +22,7 @@ export const validateBoard = (board: Position): ValidateError => {
     }
     for (let j = 0; j < row.length; j++) {
       const cell = row[j]
-      if (cell.x !== i || cell.y !== j) {
+      if (cell.x !== j || cell.y !== i) {
         return {
           ok: false,
           message: '盤面の座標が不正です。'
@@ -59,4 +59,23 @@ export const getEmptyBoard = (): Position => {
 */
 export const convertBoardPoint = (x: number, y: number): [number, number] => {
   return [x - 1, y - 1]
+}
+
+type MoveCellProps = {
+  board: Position
+  destinationX: number
+  destinationY: number
+  sourceCell: CellState
+}
+
+/*
+  駒を移動する。 =元あった場所の駒を削除し、移動先に駒を置く。
+*/
+export const moveCell = ({ board, destinationX, destinationY, sourceCell }: MoveCellProps) => {
+  if (!sourceCell.pieceState) {
+    throw new Error('sourceCell.pieceState is null. 選択されたセルに駒がありません。')
+  }
+  board[sourceCell.y][sourceCell.x] = { ...board[sourceCell.y][sourceCell.x], pieceState: null }
+  board[destinationY][destinationX] = { x: destinationX, y: destinationY, pieceState: { ...sourceCell.pieceState } }
+  return [...board]
 }

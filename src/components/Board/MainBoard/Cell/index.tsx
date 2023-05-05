@@ -3,24 +3,32 @@ import React, { useCallback } from 'react'
 
 type Props = {
   state: CellState
-  onClick?: (event: CellState) => void
+  isTurn: boolean
+  isSelected: boolean
+  onClick: (event: CellState) => void
   style?: React.CSSProperties
 }
 
-export const Cell: React.FC<Props> = ({ state, style, onClick }) => {
+export const Cell: React.FC<Props> = ({ state, isTurn, isSelected, style, onClick }) => {
   const pieceState = state.pieceState
-  const isSecondTurn = pieceState?.owner === 2
+  const isSecondPlayerOwner = pieceState?.owner === 2
   const clickEvent = useCallback(() => {
-    if (onClick) onClick(state)
+    onClick(state)
   }, [state, onClick])
   return (
-    <div style={{ ...style }} className="box-border absolute border-0">
+    <div
+      style={{ ...style }}
+      className="box-border absolute border-0"
+      onClick={clickEvent}
+    >
       {pieceState && (
         <img
-          className='hover:bg-orange-300'
-          onClick={clickEvent}
+          className={`
+            ${isTurn && !isSelected && 'hover:bg-orange-300'}
+            ${isSelected && 'bg-red-500'}
+          `}
           src={pieceState.piece.image}
-          style={{ transform: isSecondTurn ? 'rotate(180deg)' : '' }}
+          style={{ transform: isSecondPlayerOwner ? 'rotate(180deg)' : '' }}
           alt="駒の画像"
         />
       )}

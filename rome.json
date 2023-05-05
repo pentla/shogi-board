@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/rome/configuration_schema.json",
   "organizeImports": {
-    "enabled": false
+    "enabled": true
   },
   "linter": {
     "enabled": true,
@@ -12,13 +12,19 @@
       },
       "a11y": {
         "useKeyWithClickEvents": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      },
+      "nursery": {
+        "useExhaustiveDependencies": "warn"
       }
     }
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
-    "lineWidth": 120
+    "lineWidth": 90
   },
   "javascript": {
     "formatter": {
