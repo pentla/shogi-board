@@ -6,7 +6,12 @@ import { getPiece } from '@/domain/getPiece';
 
 const generateMockGame = () => {
   return {
-    game: initGame()
+    ...initGame(),
+    changeTurn: vi.fn(),
+    updateBoard: vi.fn(),
+    updateSelectedPiece: vi.fn(),
+    pushFirstPlayerCapturedPiece: vi.fn(),
+    pushSecondPlayerCapturedPiece: vi.fn(),
   }
 }
 
@@ -22,38 +27,34 @@ const generateMockGame = () => {
 //     4-2-1. TODO: 駒台に置く処理
 describe('selectCellのテスト', () => {
   it('1. 選択された駒がなく、何もない場所を選択した場合はなにもしない', () => {
-    const { game: { turn, board } } = generateMockGame()
+    const mockGame = generateMockGame()
     const cell: CellState = {
       x: 0,
       y: 0,
       pieceState: null,
     }
-    const updateBoard = vi.fn()
-    const updateSelectedPiece = vi.fn()
-    selectCell({ cell, turn, board, updateBoard, selectedPiece: null, updateSelectedPiece })
-    expect(updateBoard).toHaveBeenCalledTimes(0)
-    expect(updateSelectedPiece).toHaveBeenCalledTimes(0)
+    selectCell({ ...mockGame, cell })
+    expect(mockGame.updateBoard).toHaveBeenCalledTimes(0)
+    expect(mockGame.updateSelectedPiece).toHaveBeenCalledTimes(0)
   })
   it('2. 選択された駒がなく、自分の駒がある場所を選択した場合は選択する。', () => {
-    const { game: { turn, board } } = generateMockGame()
+    const mockGame = generateMockGame()
     const cell: CellState = {
       x: 0,
       y: 0,
       pieceState: {
         piece: getPiece('fu'),
-        owner: turn,
+        owner: mockGame.turn,
         isPromoted: false,
       },
     }
-    const updateBoard = vi.fn()
-    const updateSelectedPiece = vi.fn()
-    selectCell({ cell, turn, board, updateBoard, selectedPiece: null, updateSelectedPiece })
-    expect(updateBoard).toHaveBeenCalledTimes(0)
-    expect(updateSelectedPiece).toHaveBeenCalledTimes(1)
-    expect(updateSelectedPiece).toHaveBeenCalledWith(cell)
+    selectCell({ ...mockGame, cell })
+    expect(mockGame.updateBoard).toHaveBeenCalledTimes(0)
+    expect(mockGame.updateSelectedPiece).toHaveBeenCalledTimes(1)
+    expect(mockGame.updateSelectedPiece).toHaveBeenCalledWith(cell)
   })
   it('3-1. 行ける場所であれば置く', () => {
-    const { game: { turn, board } } = generateMockGame()
+    const mockGame = generateMockGame()
     const cell: CellState = {
       x: 0,
       y: 1,
@@ -64,15 +65,13 @@ describe('selectCellのテスト', () => {
       y: 0,
       pieceState: {
         piece: getPiece('fu'),
-        owner: turn,
+        owner: mockGame.turn,
         isPromoted: false,
       },
     }
-    const updateBoard = vi.fn()
-    const updateSelectedPiece = vi.fn()
-    selectCell({ cell, turn, board, updateBoard, selectedPiece, updateSelectedPiece })
-    expect(board[cell.y][cell.x].pieceState?.piece.kind).toBe('fu')
-    expect(updateBoard).toHaveBeenCalledTimes(1)
-    expect(updateSelectedPiece).toBeCalledWith(null)
+    selectCell({ ...mockGame, cell, selectedPiece, })
+    expect(mockGame.board[cell.y][cell.x].pieceState?.piece.kind).toBe('fu')
+    expect(mockGame.updateBoard).toHaveBeenCalledTimes(1)
+    expect(mockGame.updateSelectedPiece).toBeCalledWith(null)
   })
 })

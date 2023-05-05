@@ -1,14 +1,15 @@
-import { CellState, Game, Position, Turn } from "@/domain"
+import { CellState, Game, PieceState, Position, Turn } from "@/domain"
+import { changeTurn } from "@/domain/turn"
 import { initGame } from "@/usecase/init"
 import { selectCell } from "@/usecase/select"
 import { useCallback, useEffect, useState } from "react"
 
 export const useShogiGame = () => {
-  // 各変数の説明については domain/index.tsを参照。
+  // 各変数の説明と役割については domain/index.tsを参照。
   const [board, setBoard] = useState<Position>([])
   const [turn, setTurn] = useState<Turn>(1)
-  const [firstPlayerPieces, setFirstPlayerPieces] = useState<Game['firstPlayerCapturedPieces']>([])
-  const [secondPlayerPieces, setSecondPlayerPieces] = useState<Game['secondPlayerCapturedPieces']>([])
+  const [firstPlayerCapturedPieces, setfirstPlayerCapturedPieces] = useState<Game['firstPlayerCapturedPieces']>([])
+  const [secondPlayerCapturedPieces, setSecondPlayerCapturedPieces] = useState<Game['secondPlayerCapturedPieces']>([])
   const [selectedPiece, setSelectedPiece] = useState<Game['selectedPiece']>(null)
 
   // 将棋ゲームの初期化
@@ -16,15 +17,36 @@ export const useShogiGame = () => {
     const game = initGame()
     setBoard(game.board)
     setTurn(game.turn)
-    setFirstPlayerPieces(game.firstPlayerCapturedPieces)
-    setSecondPlayerPieces(game.secondPlayerCapturedPieces)
+    setfirstPlayerCapturedPieces(game.firstPlayerCapturedPieces)
+    setSecondPlayerCapturedPieces(game.secondPlayerCapturedPieces)
     setSelectedPiece(game.selectedPiece)
+  }, [])
+
+  // 駒台に置く処理
+  const pushFirstPlayerCapturedPiece = useCallback((pieceState: PieceState) => {
+    setfirstPlayerCapturedPieces(prev => [...prev, pieceState])
+  }, [])
+  const pushSecondPlayerCapturedPiece = useCallback((pieceState: PieceState) => {
+    setSecondPlayerCapturedPieces(prev => [...prev, pieceState])
+  }, [])
+
+  const setChangeTurn = useCallback((turn: Turn) => {
+    console.log('changeturn')
+    setTurn(changeTurn(turn))
   }, [])
 
   // セルを選択した際の処理
   const onSelectCell = useCallback((cell: CellState) => {
-    selectCell({ cell, board, turn, updateBoard: (board) => setBoard(board), selectedPiece: selectedPiece, updateSelectedPiece: (piece) => setSelectedPiece(piece) })
-  }, [board, turn, selectedPiece])
+    selectCell({
+      cell, board, turn,
+      pushFirstPlayerCapturedPiece,
+      pushSecondPlayerCapturedPiece,
+      updateBoard: (board) => setBoard(board),
+      selectedPiece: selectedPiece,
+      changeTurn: setChangeTurn,
+      updateSelectedPiece: (piece) => setSelectedPiece(piece)
+    })
+  }, [board, turn, selectedPiece, setChangeTurn, pushFirstPlayerCapturedPiece, pushSecondPlayerCapturedPiece])
 
-  return { board, turn, secondPlayerPieces, firstPlayerPieces, selectedPiece, onSelectCell }
+  return { board, turn, secondPlayerCapturedPieces, firstPlayerCapturedPieces, selectedPiece, onSelectCell }
 }
