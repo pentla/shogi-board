@@ -2,6 +2,7 @@ import { CellState, Game } from '@/domain'
 import { moveCell, putCapturedCell } from '@/domain/board'
 import { endTurn } from './endTurn'
 import { pushCapturedPiece, removeCapturedPiece } from '@/domain/capturedPiece'
+import { clearSelectedPiece } from './clearSelectedPiece'
 
 type SelectPieceProps = {
   cell: CellState
@@ -56,7 +57,8 @@ export const selectCell = ({
       updateBoard(
         moveCell({ board, destinationX: cell.x, destinationY: cell.y, sourceCell: selectedPiece }),
       )
-      endTurn({ turn, updateSelectedPiece, updateSelectedCapturedPiece, updateTurn })
+      clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+      endTurn({ turn, updateTurn })
 
       // 行けない場所であれば解除する
       return
@@ -103,7 +105,8 @@ export const selectCell = ({
             sourceCell: selectedPiece,
           }),
         )
-        endTurn({ turn, updateSelectedPiece, updateSelectedCapturedPiece, updateTurn })
+        clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+        endTurn({ turn, updateTurn })
         return
       }
     }
@@ -131,8 +134,16 @@ export const selectCell = ({
           }),
         )
       } else {
-        removeCapturedPiece({ state: selectedCapturedPiece, pieces: secondPlayerCapturedPieces })
+        updateSecondPlayerCapturedPiece(
+          removeCapturedPiece({
+            state: selectedCapturedPiece,
+            pieces: secondPlayerCapturedPieces,
+          }),
+        )
       }
+      clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+      endTurn({ turn, updateTurn })
+      return
     }
   }
 }

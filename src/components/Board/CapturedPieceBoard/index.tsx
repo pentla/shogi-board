@@ -31,7 +31,7 @@ export const CapturedPieceBoard: React.FC<Props> = ({
           key={i}
           state={piece}
           isTurn={isTurn}
-          isSelected={selectedCapturedPiece?.index === i}
+          isSelected={isTurn && selectedCapturedPiece?.index === i}
           onClick={clickEvent}
           style={{ top: 30 * Math.floor(i / 4), left: 30 * (i % 4), width: 30 }}
         />
