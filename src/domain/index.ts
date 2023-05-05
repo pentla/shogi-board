@@ -11,16 +11,23 @@ export type Game = {
 
   /*
    選択中の駒。
-   盤にある駒、または持ち駒を選択したときに当該のcellStateが入る。
+   盤にある駒を選択した際にcellStateが入る。
    未選択状態、または駒を指したあとはnullになる
   */
   selectedPiece: CellState | null
 
+  /*
+    選択中の持ち駒。
+    持ち駒を選択した際にcapturedStateが入る。
+    未選択状態、または駒を指したあとはnullになる
+  */
+  selectedCapturedPiece: CapturedState | null
+
   // 先手の持ち駒
-  firstPlayerCapturedPieces: PieceState[]
+  firstPlayerCapturedPieces: CapturedState[]
 
   // 後手の持ち駒
-  secondPlayerCapturedPieces: PieceState[]
+  secondPlayerCapturedPieces: CapturedState[]
 }
 
 export type Position = CellState[][]
@@ -28,21 +35,40 @@ export type Position = CellState[][]
 
 /*
   ボード上の各マスの状態を表す。
-  x: マスのx座標(0~8)
-  y: マスのy座標(0~8)
-  piece: マスに存在するコマの状態。存在しなければnull
 */
 export type CellState = {
+  // マスのx座標(0~8)
   x: number
+
+  // マスのy座標(0~8)
   y: number
+
+  // マスに存在する駒の状態。存在しなければnull
   pieceState: PieceState | null
 }
 
 /*
-  コマの状態を表す。
+  持ち駒の状態を表す。
+  index: 持ち駒が何番目に存在するか
+  pieceState: 駒の状態
+*/
+export type CapturedState = {
+
+  // 持ち主(先手 or 後手)
+  owner: Turn
+
+  // 持ち駒が何番目に存在するか
+  index: number
+
+  // 駒の状態
+  pieceState: PieceState
+}
+
+/*
+  駒の状態を表す。
 */
 export type PieceState = {
-  // コマの種類
+  // 駒の種類
   piece: Piece
 
   // 成っているかどうか
@@ -53,7 +79,7 @@ export type PieceState = {
 }
 
 /*
-  歩、香、桂、銀、金、角、飛、玉のコマの状態を表す。
+  駒の状態を表す。
 */
 export type Piece = {
   kind: PieceKind
@@ -65,6 +91,7 @@ export type Piece = {
   promotedImage: string
 }
 
+// 駒の種類。歩、香、桂、銀、金、角、飛、玉。
 export type PieceKind = 'fu' | 'kyo' | 'kei' | 'gin' | 'kin' | 'kaku' | 'hisha' | 'gyoku'
 
 // 先手=1 or 後手=2

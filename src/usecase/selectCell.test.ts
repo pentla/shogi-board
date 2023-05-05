@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { selectCell } from './select'
+import { selectCell } from './selectCell'
 import { initGame } from './init';
 import { CellState } from '@/domain';
 import { getPiece } from '@/domain/getPiece';

@@ -1,4 +1,4 @@
-import { Position, CellState } from "."
+import { Position, CellState, CapturedState } from '.'
 
 type ValidateError = {
   ok: boolean
@@ -9,7 +9,7 @@ export const validateBoard = (board: Position): ValidateError => {
   if (board.length !== 9) {
     return {
       ok: false,
-      message: '盤面の縦の長さが不正です。'
+      message: '盤面の縦の長さが不正です。',
     }
   }
   for (let i = 0; i < board.length; i++) {
@@ -17,7 +17,7 @@ export const validateBoard = (board: Position): ValidateError => {
     if (row.length !== 9) {
       return {
         ok: false,
-        message: '盤面の横の長さが不正です。'
+        message: '盤面の横の長さが不正です。',
       }
     }
     for (let j = 0; j < row.length; j++) {
@@ -25,14 +25,14 @@ export const validateBoard = (board: Position): ValidateError => {
       if (cell.x !== j || cell.y !== i) {
         return {
           ok: false,
-          message: '盤面の座標が不正です。'
+          message: '盤面の座標が不正です。',
         }
       }
     }
   }
   return {
     ok: true,
-    message: ''
+    message: '',
   }
 }
 
@@ -76,6 +76,31 @@ export const moveCell = ({ board, destinationX, destinationY, sourceCell }: Move
     throw new Error('sourceCell.pieceState is null. 選択されたセルに駒がありません。')
   }
   board[sourceCell.y][sourceCell.x] = { ...board[sourceCell.y][sourceCell.x], pieceState: null }
-  board[destinationY][destinationX] = { x: destinationX, y: destinationY, pieceState: { ...sourceCell.pieceState } }
+  board[destinationY][destinationX] = {
+    x: destinationX,
+    y: destinationY,
+    pieceState: { ...sourceCell.pieceState },
+  }
+  return [...board]
+}
+
+type PutCaputuredCellProps = {
+  board: Position
+  destinationX: number
+  destinationY: number
+  capturedState: CapturedState
+}
+
+export const putCapturedCell = ({
+  board,
+  destinationX,
+  destinationY,
+  capturedState,
+}: PutCaputuredCellProps) => {
+  board[destinationY][destinationX] = {
+    x: destinationX,
+    y: destinationY,
+    pieceState: { ...capturedState.pieceState },
+  }
   return [...board]
 }

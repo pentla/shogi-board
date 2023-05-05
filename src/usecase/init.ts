@@ -16,7 +16,8 @@ export const initGame = (initialPosition?: Position): Game => {
     turn: 1,
     firstPlayerCapturedPieces: [],
     secondPlayerCapturedPieces: [],
-    selectedPiece: null
+    selectedPiece: null,
+    selectedCapturedPiece: null
   }
   return game
 }
