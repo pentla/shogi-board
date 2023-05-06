@@ -3,6 +3,8 @@ import { moveCell, putCapturedCell } from '@/domain/board'
 import { endTurn } from './endTurn'
 import { pushCapturedPiece, removeCapturedPiece } from '@/domain/capturedPiece'
 import { clearSelectedPiece } from './clearSelectedPiece'
+import { getMovableCoordinates } from '@/domain/movableRule'
+import { isMovable } from '@/domain/coordinates'
 
 type SelectPieceProps = {
   cell: CellState
@@ -13,6 +15,7 @@ type SelectPieceProps = {
   updateSelectedCapturedPiece: (piece: Game['selectedCapturedPiece']) => void
   updateFirstPlayerCapturedPiece: (pieces: Game['firstPlayerCapturedPieces']) => void
   updateSecondPlayerCapturedPiece: (pieces: Game['secondPlayerCapturedPieces']) => void
+  updateMovablePositions: (movablePositions: Game['movablePositions']) => void
 }
 
 /*
@@ -27,6 +30,7 @@ export const selectCell = ({
     selectedCapturedPiece,
     firstPlayerCapturedPieces,
     secondPlayerCapturedPieces,
+    movablePositions,
   },
   updateTurn,
   updateBoard,
@@ -34,6 +38,7 @@ export const selectCell = ({
   updateSelectedCapturedPiece,
   updateFirstPlayerCapturedPiece,
   updateSecondPlayerCapturedPiece,
+  updateMovablePositions,
 }: SelectPieceProps) => {
   // 選択された駒がなく、何もない場所を選択した場合はなにもしない
   if (!cell.pieceState && !selectedPiece && !selectedCapturedPiece) {
@@ -44,6 +49,7 @@ export const selectCell = ({
   if (cell.pieceState && !selectedPiece && !selectedCapturedPiece) {
     if (turn === cell.pieceState.owner) {
       updateSelectedPiece({ ...cell })
+      updateMovablePositions(getMovableCoordinates({ board, selectedPiece: cell }))
     }
     return
   }
@@ -52,12 +58,24 @@ export const selectCell = ({
   if (selectedPiece?.pieceState) {
     // 何もない場所を選択した場合
     if (!cell.pieceState) {
+      // 行けない場所であれば選択を解除する
+      if (!isMovable(movablePositions, { x: cell.x, y: cell.y })) {
+        clearSelectedPiece({
+          updateSelectedPiece,
+          updateSelectedCapturedPiece,
+          updateMovablePositions,
+        })
+        return
+      }
       // 行ける場所であれば置く
-      // TODO: 行けるかどうかの判定をする
       updateBoard(
         moveCell({ board, destinationX: cell.x, destinationY: cell.y, sourceCell: selectedPiece }),
       )
-      clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+      clearSelectedPiece({
+        updateSelectedPiece,
+        updateSelectedCapturedPiece,
+        updateMovablePositions,
+      })
       endTurn({ turn, updateTurn })
 
       // 行けない場所であれば解除する
@@ -105,7 +123,11 @@ export const selectCell = ({
             sourceCell: selectedPiece,
           }),
         )
-        clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+        clearSelectedPiece({
+          updateSelectedPiece,
+          updateSelectedCapturedPiece,
+          updateMovablePositions,
+        })
         endTurn({ turn, updateTurn })
         return
       }
@@ -116,8 +138,16 @@ export const selectCell = ({
   if (selectedCapturedPiece) {
     // 何もない場所を選択した場合
     if (!cell.pieceState) {
+      // 行けない場所であれば選択を解除する
+      if (!isMovable(movablePositions, { x: cell.x, y: cell.y })) {
+        clearSelectedPiece({
+          updateSelectedPiece,
+          updateSelectedCapturedPiece,
+          updateMovablePositions,
+        })
+        return
+      }
       // 行ける場所であれば置く
-      // TODO: 持ち駒を置ける場所のルールを設定していない
       updateBoard(
         putCapturedCell({
           board,
@@ -141,7 +171,11 @@ export const selectCell = ({
           }),
         )
       }
-      clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+      clearSelectedPiece({
+        updateSelectedPiece,
+        updateSelectedCapturedPiece,
+        updateMovablePositions,
+      })
       endTurn({ turn, updateTurn })
       return
     }

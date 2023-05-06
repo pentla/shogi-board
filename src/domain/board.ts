@@ -1,11 +1,11 @@
-import { Position, CellState, CapturedState } from '.'
+import { Board, CellState, CapturedState } from '.'
 
 type ValidateError = {
   ok: boolean
   message: string
 }
 
-export const validateBoard = (board: Position): ValidateError => {
+export const validateBoard = (board: Board): ValidateError => {
   if (board.length !== 9) {
     return {
       ok: false,
@@ -36,7 +36,7 @@ export const validateBoard = (board: Position): ValidateError => {
   }
 }
 
-export const getEmptyBoard = (): Position => {
+export const getEmptyBoard = (): Board => {
   const board: CellState[][] = []
   for (let i = 0; i < 9; i++) {
     const row: CellState[] = []
@@ -62,7 +62,7 @@ export const convertBoardPoint = (x: number, y: number): [number, number] => {
 }
 
 type MoveCellProps = {
-  board: Position
+  board: Board
   destinationX: number
   destinationY: number
   sourceCell: CellState
@@ -85,7 +85,7 @@ export const moveCell = ({ board, destinationX, destinationY, sourceCell }: Move
 }
 
 type PutCaputuredCellProps = {
-  board: Position
+  board: Board
   destinationX: number
   destinationY: number
   capturedState: CapturedState

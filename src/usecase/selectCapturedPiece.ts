@@ -7,6 +7,7 @@ type Props = {
   selectedPiece: Game['selectedPiece']
   updateSelectedPiece: (piece: Game['selectedPiece']) => void
   updateSelectedCapturedPiece: (piece: Game['selectedCapturedPiece']) => void
+  updateMovablePositions: (movablePositions: Game['movablePositions']) => void
 }
 
 export const selectCapturedPiece = ({
@@ -15,13 +16,14 @@ export const selectCapturedPiece = ({
   selectedPiece,
   updateSelectedPiece,
   updateSelectedCapturedPiece,
+  updateMovablePositions,
 }: Props) => {
   // 自分の持っている駒でない場合はなにもしない
   if (turn !== capturedPiece?.owner) return
 
   // 選択中の駒を持っている場合は、選択中の駒をnullにする
   if (selectedPiece) {
-    clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece })
+    clearSelectedPiece({ updateSelectedPiece, updateSelectedCapturedPiece, updateMovablePositions })
     return
   }
 

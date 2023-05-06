@@ -1,29 +1,30 @@
-import type { Game, Position } from '@/domain'
+import type { Game, Board } from '@/domain'
 import { validateBoard, getEmptyBoard } from '@/domain/board'
 import { getPiece } from '@/domain/getPiece'
 import { firstPlayerPieceState, secondPlayerPieceState } from '@/domain/pieceState'
 
 /* ゲーム開始時、またはリセット時に呼び出す */
-export const initGame = (initialPosition?: Position): Game => {
-  if (initialPosition) {
-    const error = validateBoard(initialPosition)
+export const initGame = (initialBoard?: Board): Game => {
+  if (initialBoard) {
+    const error = validateBoard(initialBoard)
     if (!error.ok) {
       throw new Error(`board validate error: ${error.message}`)
     }
   }
   const game: Game = {
-    board: initialPosition || initBoardPosition(),
+    board: initialBoard || initBoardPosition(),
     turn: 1,
     firstPlayerCapturedPieces: [],
     secondPlayerCapturedPieces: [],
     selectedPiece: null,
-    selectedCapturedPiece: null
+    selectedCapturedPiece: null,
+    movablePositions: [],
   }
   return game
 }
 
 // 将棋の初期配置
-export const initBoardPosition = (): Position => {
+export const initBoardPosition = (): Board => {
   const board = getEmptyBoard()
   // 歩の配置
   for (let i = 0; i < 9; i++) {
@@ -68,4 +69,3 @@ export const initBoardPosition = (): Position => {
 
   return board
 }
-

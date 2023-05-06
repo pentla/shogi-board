@@ -1,10 +1,9 @@
 export type Game = {
-
   /*
     版の状態。9*9の二次元配列で表現する。
     board[0][0]は用語上では９一、そこからひとつ右のマスはboard[0][1], 9二となる。
   */
-  board: Position
+  board: Board
 
   // 現在の手番。先手=1 or 後手=2
   turn: Turn
@@ -28,10 +27,12 @@ export type Game = {
 
   // 後手の持ち駒
   secondPlayerCapturedPieces: CapturedState[]
+
+  // 駒を選択後、置ける場所
+  movablePositions: Coordinate[]
 }
 
-export type Position = CellState[][]
-
+export type Board = CellState[][]
 
 /*
   ボード上の各マスの状態を表す。
@@ -53,7 +54,6 @@ export type CellState = {
   pieceState: 駒の状態
 */
 export type CapturedState = {
-
   // 持ち主(先手 or 後手)
   owner: Turn
 
@@ -96,3 +96,22 @@ export type PieceKind = 'fu' | 'kyo' | 'kei' | 'gin' | 'kin' | 'kaku' | 'hisha' 
 
 // 先手=1 or 後手=2
 export type Turn = 1 | 2
+
+/*
+ 盤上の座標を指す。取ることのできる値は以下の通り。
+ boardの配列を直接いじるとバグの元になるので、この型を使って座標を指定すること。
+ 0 1 2 3 4 5 6 7 8 (x)
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ (y)
+*/
+export type Coordinate = {
+  x: number
+  y: number
+}

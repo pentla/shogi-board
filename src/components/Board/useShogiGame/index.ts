@@ -1,4 +1,4 @@
-import { CapturedState, CellState, Game, Position, Turn } from '@/domain'
+import { CapturedState, CellState, Game, Board, Turn } from '@/domain'
 import { initGame } from '@/usecase/init'
 import { selectCapturedPiece } from '@/usecase/selectCapturedPiece'
 import { selectCell } from '@/usecase/selectCell'
@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 export const useShogiGame = () => {
   // 各変数の説明と役割については domain/index.tsを参照。
-  const [board, setBoard] = useState<Position>([])
+  const [board, setBoard] = useState<Board>([])
   const [turn, setTurn] = useState<Turn>(1)
   const [firstPlayerCapturedPieces, setfirstPlayerCapturedPieces] = useState<
     Game['firstPlayerCapturedPieces']
@@ -17,6 +17,7 @@ export const useShogiGame = () => {
   const [selectedPiece, setSelectedPiece] = useState<Game['selectedPiece']>(null)
   const [selectedCapturedPiece, setSelectedCapturedPiece] =
     useState<Game['selectedCapturedPiece']>(null)
+  const [movablePositions, setMovablePositions] = useState<Game['movablePositions']>([])
 
   // 将棋ゲームの初期化
   useEffect(() => {
@@ -36,6 +37,7 @@ export const useShogiGame = () => {
         game: {
           board,
           turn,
+          movablePositions,
           selectedPiece,
           selectedCapturedPiece,
           firstPlayerCapturedPieces,
@@ -47,6 +49,7 @@ export const useShogiGame = () => {
         updateSelectedCapturedPiece: setSelectedCapturedPiece,
         updateFirstPlayerCapturedPiece: setfirstPlayerCapturedPieces,
         updateSecondPlayerCapturedPiece: setSecondPlayerCapturedPieces,
+        updateMovablePositions: setMovablePositions,
       })
     },
     [
@@ -67,6 +70,7 @@ export const useShogiGame = () => {
         selectedPiece,
         updateSelectedPiece: setSelectedPiece,
         updateSelectedCapturedPiece: setSelectedCapturedPiece,
+        updateMovablePositions: setMovablePositions,
       })
     },
     [turn, selectedPiece],
