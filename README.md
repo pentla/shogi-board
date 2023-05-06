@@ -6,15 +6,24 @@ shogi-board GUI.
 
 ```javascript
 //  install modules
-npm install
+pnpm install
 
 //  develop server
-npm run dev
-
-//  generate html and javascript
-npm run build
+pnpm run dev
 ```
 
 Open index.html in browser.
 
-https://profile-site-231313.appspot.com/projects/shogi_board
+### Structure
+
+```
+src
+├── assets
+├── components
+├── domain
+├── index.d.ts
+├── main.tsx
+└── usecase
+```
+
+https://shogi-board.vercel.app/
