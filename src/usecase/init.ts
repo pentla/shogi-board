@@ -56,12 +56,12 @@ export const initBoardPosition = (): Board => {
   board[8][5].pieceState = firstPlayerPieceState(getPiece('kin'))
 
   // 角の配置
-  board[1][1].pieceState = secondPlayerPieceState(getPiece('kaku'))
-  board[7][7].pieceState = firstPlayerPieceState(getPiece('kaku'))
+  board[1][7].pieceState = secondPlayerPieceState(getPiece('kaku'))
+  board[7][1].pieceState = firstPlayerPieceState(getPiece('kaku'))
 
   // 飛の配置
-  board[1][7].pieceState = secondPlayerPieceState(getPiece('hisha'))
-  board[7][1].pieceState = firstPlayerPieceState(getPiece('hisha'))
+  board[1][1].pieceState = secondPlayerPieceState(getPiece('hisha'))
+  board[7][7].pieceState = firstPlayerPieceState(getPiece('hisha'))
 
   // 玉の配置
   board[0][4].pieceState = secondPlayerPieceState(getPiece('gyoku'))

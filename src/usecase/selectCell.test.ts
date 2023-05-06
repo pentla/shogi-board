@@ -1,17 +1,19 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest'
 import { selectCell } from './selectCell'
-import { initGame } from './init';
-import { CellState } from '@/domain';
-import { getPiece } from '@/domain/getPiece';
+import { initGame } from './init'
+import { CellState } from '@/domain'
+import { getPiece } from '@/domain/getPiece'
 
 const generateMockGame = () => {
   return {
-    ...initGame(),
-    changeTurn: vi.fn(),
+    game: { ...initGame() },
     updateBoard: vi.fn(),
+    updateTurn: vi.fn(),
     updateSelectedPiece: vi.fn(),
-    pushFirstPlayerCapturedPiece: vi.fn(),
-    pushSecondPlayerCapturedPiece: vi.fn(),
+    updateSelectedCapturedPiece: vi.fn(),
+    updateFirstPlayerCapturedPiece: vi.fn(),
+    updateSecondPlayerCapturedPiece: vi.fn(),
+    updateMovablePositions: vi.fn(),
   }
 }
 
@@ -44,7 +46,7 @@ describe('selectCellのテスト', () => {
       y: 0,
       pieceState: {
         piece: getPiece('fu'),
-        owner: mockGame.turn,
+        owner: mockGame.game.turn,
         isPromoted: false,
       },
     }
@@ -56,7 +58,7 @@ describe('selectCellのテスト', () => {
   it('3-1. 行ける場所であれば置く', () => {
     const mockGame = generateMockGame()
     const cell: CellState = {
-      x: 0,
+      x: 2,
       y: 1,
       pieceState: null,
     }
@@ -65,12 +67,12 @@ describe('selectCellのテスト', () => {
       y: 0,
       pieceState: {
         piece: getPiece('fu'),
-        owner: mockGame.turn,
+        owner: mockGame.game.turn,
         isPromoted: false,
       },
     }
-    selectCell({ ...mockGame, cell, selectedPiece, })
-    expect(mockGame.board[cell.y][cell.x].pieceState?.piece.kind).toBe('fu')
+    selectCell({ ...mockGame, cell, game: { ...mockGame.game, selectedPiece } })
+    expect(mockGame.game.board[selectedPiece.y][selectedPiece.x].pieceState?.piece.kind).toBe('fu')
     expect(mockGame.updateBoard).toHaveBeenCalledTimes(1)
     expect(mockGame.updateSelectedPiece).toBeCalledWith(null)
   })

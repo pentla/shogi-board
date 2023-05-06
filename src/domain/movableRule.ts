@@ -31,7 +31,7 @@ export const getMovableCoordinates = ({
       if (pieceState.isPromoted) {
         coordinates = movablePositionKin(pieceState.owner, { x, y })
       } else {
-        coordinates = movablePositionKyo(pieceState.owner, { x, y })
+        coordinates = movablePositionKyo(pieceState.owner, { x, y }, board)
       }
       break
     case 'kei':
@@ -53,16 +53,16 @@ export const getMovableCoordinates = ({
       break
     case 'hisha':
       if (pieceState.isPromoted) {
-        coordinates = movablePositionRyu(pieceState.owner, { x, y })
+        coordinates = movablePositionRyu(pieceState.owner, { x, y }, board)
       } else {
-        coordinates = movablePositionHisha(pieceState.owner, { x, y })
+        coordinates = movablePositionHisha(pieceState.owner, { x, y }, board)
       }
       break
     case 'kaku':
       if (pieceState.isPromoted) {
-        coordinates = movablePositionUma(pieceState.owner, { x, y })
+        coordinates = movablePositionUma(pieceState.owner, { x, y }, board)
       } else {
-        coordinates = movablePositionKaku(pieceState.owner, { x, y })
+        coordinates = movablePositionKaku(pieceState.owner, { x, y }, board)
       }
       break
     case 'gyoku':
@@ -115,43 +115,43 @@ const movablePositionKei = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {
 }
 
 // 香車の動き
-const movablePositionKyo = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {
-  return move.moveRightStraight(turn, { x, y })
+const movablePositionKyo = (turn: Turn, { x, y }: Coordinate, board: Board): Coordinate[] => {
+  return move.moveRightStraight(turn, { x, y }, board)
 }
 
 // 角の動き
-const movablePositionKaku = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {
-  return [...move.moveDiagonal(turn, { x, y })]
+const movablePositionKaku = (turn: Turn, { x, y }: Coordinate, board: Board): Coordinate[] => {
+  return [...move.moveDiagonal(turn, { x, y }, board)]
 }
 
 // 馬の動き
-const movablePositionUma = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {
+const movablePositionUma = (turn: Turn, { x, y }: Coordinate, board: Board): Coordinate[] => {
   return [
     ...move.moveFront(turn, { x, y }),
     ...move.moveRight(turn, { x, y }),
     ...move.moveLeft(turn, { x, y }),
     ...move.moveBack(turn, { x, y }),
-    ...move.moveDiagonal(turn, { x, y }),
+    ...move.moveDiagonal(turn, { x, y }, board),
   ]
 }
 
 // 飛車の動き
-const movablePositionHisha = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {
+const movablePositionHisha = (turn: Turn, { x, y }: Coordinate, board: Board): Coordinate[] => {
   return [
-    ...move.moveFrontStraight(turn, { x, y }),
-    ...move.moveRightStraight(turn, { x, y }),
-    ...move.moveLeftStraight(turn, { x, y }),
-    ...move.moveBackStraight(turn, { x, y }),
+    ...move.moveFrontStraight(turn, { x, y }, board),
+    ...move.moveRightStraight(turn, { x, y }, board),
+    ...move.moveLeftStraight(turn, { x, y }, board),
+    ...move.moveBackStraight(turn, { x, y }, board),
   ]
 }
 
 // 龍の動き
-const movablePositionRyu = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {
+const movablePositionRyu = (turn: Turn, { x, y }: Coordinate, board: Board): Coordinate[] => {
   return [
-    ...move.moveFrontStraight(turn, { x, y }),
-    ...move.moveRightStraight(turn, { x, y }),
-    ...move.moveLeftStraight(turn, { x, y }),
-    ...move.moveBackStraight(turn, { x, y }),
+    ...move.moveFrontStraight(turn, { x, y }, board),
+    ...move.moveRightStraight(turn, { x, y }, board),
+    ...move.moveLeftStraight(turn, { x, y }, board),
+    ...move.moveBackStraight(turn, { x, y }, board),
     ...move.moveRightFront(turn, { x, y }),
     ...move.moveLeftFront(turn, { x, y }),
     ...move.moveRightBack(turn, { x, y }),
