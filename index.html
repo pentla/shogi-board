@@ -1,34 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <meta charset="utf-8">
-    <title>shogiboard</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>将棋盤</title>
   </head>
   <body>
-    <!-- 将棋盤 -->
-    <main>
-      <div class="container">
-        <div class="textbox" id="textbox-top">
-          <p id="text-sente">▲先手</p>
-        </div>
-        <div class="komadai" id="komadai-gote"></div>
-        <div id="ban-position">
-          <div id="ban"></div>
-        </div>
-        <div class="komadai" id="komadai-sente"></div>
-        <div class="textbox" id="textbox-bottom">
-          <p id="text-gote">△後手</p>
-        </div>
-      </div>
-    </main>
-    <!-- モーダル(最初は非表示) -->
-    <div class="modal hidden">
-      成りますか？
-      <div id="modal-btn">
-        <div class="modal-option">yes</div>
-        <div class="modal-option">no</div>
-      </div>
-    </div>
-    <script type="text/javascript" src="dist/main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

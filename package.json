@@ -1,26 +1,25 @@
 {
-  "name": "shogiboard",
+  "name": "shogi-board",
   "version": "1.0.0",
-  "main": "js/src/index.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server",
-    "build": "webpack"
+    "test": "vitest",
+    "dev": "vite"
   },
-  "author": "watkazuki",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.5",
-    "@babel/preset-env": "^7.4.5",
-    "babel-loader": "^8.0.6",
-    "babel-preset-env": "^1.7.0",
-    "css-loader": "^6.6.0",
-    "file-loader": "^1.1.11",
-    "mini-css-extract-plugin": "^0.5.0",
-    "style-loader": "^0.21.0",
-    "webpack": "^4.34.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+  "dependencies": {
+    "@types/react": "^18.2.3",
+    "@types/react-dom": "^18.2.3",
+    "@vitejs/plugin-react": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rome": "^12.0.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.4",
+    "vite-tsconfig-paths": "^4.2.0",
+    "vitest": "^0.31.0"
   }
 }
