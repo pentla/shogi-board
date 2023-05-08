@@ -1,3 +1,4 @@
+import { secondPlayerPieceState, firstPlayerPieceState } from '@/domain/pieceState'
 import { CellState, Game } from '@/domain'
 import { moveCell, putCapturedCell } from '@/domain/board'
 import { endTurn } from './endTurn'
@@ -97,7 +98,7 @@ export const selectCell = ({
             pushCapturedPiece({
               state: {
                 owner: 1,
-                pieceState: selectedPiece.pieceState,
+                pieceState: firstPlayerPieceState(cell.pieceState.piece),
                 index: firstPlayerCapturedPieces.length,
               },
               pieces: firstPlayerCapturedPieces,
@@ -108,7 +109,7 @@ export const selectCell = ({
             pushCapturedPiece({
               state: {
                 owner: 2,
-                pieceState: selectedPiece.pieceState,
+                pieceState: secondPlayerPieceState(cell.pieceState.piece),
                 index: secondPlayerCapturedPieces.length,
               },
               pieces: secondPlayerCapturedPieces,
