@@ -15,18 +15,15 @@ export const Board: React.FC = () => {
     onSelectCell,
     onSelectCapturedPiece,
     selectedPiece,
+    movablePositions,
   } = useShogiGame()
   const isFirstPlayerTurn = turn === 1
   return (
     <div
-      className="relative"
+      className='relative'
       style={{ width: 810, height: 540, backgroundImage: `url(${BoardImage})` }}
     >
-      <TurnText
-        isTurn={!isFirstPlayerTurn}
-        label="△後手"
-        style={{ top: 60, right: 54 }}
-      />
+      <TurnText isTurn={!isFirstPlayerTurn} label='△後手' style={{ top: 60, right: 54 }} />
       <CapturedPieceBoard
         pieces={firstPlayerCapturedPieces}
         isTurn={turn === 1}
@@ -39,12 +36,9 @@ export const Board: React.FC = () => {
         turn={turn}
         onSelectCell={onSelectCell}
         selectedPiece={selectedPiece}
+        movablePositions={movablePositions}
       />
-      <TurnText
-        isTurn={isFirstPlayerTurn}
-        label="▲先手"
-        style={{ bottom: 55, left: 53 }}
-      />
+      <TurnText isTurn={isFirstPlayerTurn} label='▲先手' style={{ bottom: 55, left: 53 }} />
       <CapturedPieceBoard
         pieces={secondPlayerCapturedPieces}
         selectedCapturedPiece={selectedCapturedPiece}

@@ -85,5 +85,6 @@ export const useShogiGame = () => {
     selectedCapturedPiece,
     onSelectCell,
     onSelectCapturedPiece,
+    movablePositions,
   }
 }

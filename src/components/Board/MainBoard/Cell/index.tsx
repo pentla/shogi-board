@@ -5,11 +5,19 @@ type Props = {
   state: CellState
   isTurn: boolean
   isSelected: boolean
+  isMovablePosition: boolean
   onClick: (event: CellState) => void
   style?: React.CSSProperties
 }
 
-export const Cell: React.FC<Props> = ({ state, isTurn, isSelected, style, onClick }) => {
+export const Cell: React.FC<Props> = ({
+  state,
+  isTurn,
+  isSelected,
+  isMovablePosition,
+  style,
+  onClick,
+}) => {
   const pieceState = state.pieceState
   const isSecondPlayerOwner = pieceState?.owner === 2
   const clickEvent = useCallback(() => {
@@ -18,7 +26,7 @@ export const Cell: React.FC<Props> = ({ state, isTurn, isSelected, style, onClic
   return (
     <div
       style={{ ...style }}
-      className="box-border absolute border-0"
+      className={`box-border absolute border-0 ${isMovablePosition && 'bg-orange-300 opacity-50'}`}
       onClick={clickEvent}
     >
       {pieceState && (
@@ -29,7 +37,7 @@ export const Cell: React.FC<Props> = ({ state, isTurn, isSelected, style, onClic
           `}
           src={pieceState.piece.image}
           style={{ transform: isSecondPlayerOwner ? 'rotate(180deg)' : '' }}
-          alt="駒の画像"
+          alt='駒の画像'
         />
       )}
     </div>

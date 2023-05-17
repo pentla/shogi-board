@@ -6,6 +6,7 @@ type Props = {
   position: CellState[][]
   turn: Turn
   selectedPiece: Game['selectedPiece']
+  movablePositions: Game['movablePositions']
   onSelectCell: (cell: CellState) => void
 }
 
@@ -17,6 +18,7 @@ export const MainBoard: React.FC<Props> = ({
   turn,
   onSelectCell,
   selectedPiece,
+  movablePositions,
 }) => {
   return (
     <div
@@ -28,11 +30,15 @@ export const MainBoard: React.FC<Props> = ({
           return (
             <React.Fragment key={i}>
               {row.map((cell, j) => {
+                const movablePositionIndex = movablePositions.findIndex(
+                  (position) => position.x === j && position.y === i,
+                )
                 return (
                   <Cell
                     isTurn={cell.pieceState?.owner === turn}
                     isSelected={selectedPiece?.x === j && selectedPiece?.y === i}
                     key={j}
+                    isMovablePosition={movablePositionIndex !== -1}
                     state={cell}
                     onClick={onSelectCell}
                     style={{
