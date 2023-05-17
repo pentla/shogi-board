@@ -70,7 +70,13 @@ export const selectCell = ({
       }
       // 行ける場所であれば置く
       updateBoard(
-        moveCell({ board, destinationX: cell.x, destinationY: cell.y, sourceCell: selectedPiece }),
+        moveCell({
+          turn,
+          board,
+          destinationX: cell.x,
+          destinationY: cell.y,
+          sourceCell: selectedPiece,
+        }),
       )
       clearSelectedPiece({
         updateSelectedPiece,
@@ -118,6 +124,7 @@ export const selectCell = ({
         }
         updateBoard(
           moveCell({
+            turn,
             board,
             destinationX: cell.x,
             destinationY: cell.y,

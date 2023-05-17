@@ -1,4 +1,4 @@
-import { Board, CellState, CapturedState } from '.'
+import { Board, CellState, CapturedState, Turn } from '.'
 
 type ValidateError = {
   ok: boolean
@@ -62,6 +62,7 @@ export const convertBoardPoint = (x: number, y: number): [number, number] => {
 }
 
 type MoveCellProps = {
+  turn: Turn
   board: Board
   destinationX: number
   destinationY: number
@@ -71,15 +72,33 @@ type MoveCellProps = {
 /*
   駒を移動する。 =元あった場所の駒を削除し、移動先に駒を置く。
 */
-export const moveCell = ({ board, destinationX, destinationY, sourceCell }: MoveCellProps) => {
+export const moveCell = ({
+  turn,
+  board,
+  destinationX,
+  destinationY,
+  sourceCell,
+}: MoveCellProps): Board => {
   if (!sourceCell.pieceState) {
     throw new Error('sourceCell.pieceState is null. 選択されたセルに駒がありません。')
   }
+  console.log(destinationX, destinationY)
+  let changePromote = false
+  if (!sourceCell.pieceState.isPromoted) {
+    if ((turn === 1 && destinationY <= 2) || (turn === 2 && destinationY >= 6)) {
+      changePromote = window.confirm('駒を成りますか？')
+    }
+  }
+
   board[sourceCell.y][sourceCell.x] = { ...board[sourceCell.y][sourceCell.x], pieceState: null }
   board[destinationY][destinationX] = {
     x: destinationX,
     y: destinationY,
-    pieceState: { ...sourceCell.pieceState },
+    pieceState: {
+      ...sourceCell.pieceState,
+      // 成る宣言をしたら成る、何もなければそのまま
+      isPromoted: changePromote ? true : sourceCell.pieceState.isPromoted,
+    },
   }
   return [...board]
 }

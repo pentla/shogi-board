@@ -35,7 +35,7 @@ export const Cell: React.FC<Props> = ({
             ${isTurn && !isSelected && 'hover:bg-orange-300'}
             ${isSelected && 'bg-red-500'}
           `}
-          src={pieceState.piece.image}
+          src={pieceState.isPromoted ? pieceState.piece.promotedImage : pieceState.piece.image}
           style={{ transform: isSecondPlayerOwner ? 'rotate(180deg)' : '' }}
           alt='駒の画像'
         />
