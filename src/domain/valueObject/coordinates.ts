@@ -1,4 +1,4 @@
-import { Coordinate } from '.'
+import { Coordinate } from '../entity'
 
 /* その地点まで移動できるかどうか */
 export const isMovable = (coordinates: Coordinate[], destination: Coordinate): boolean => {

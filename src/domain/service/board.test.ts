@@ -1,13 +1,11 @@
-import { validateBoard } from "./board"
-import { describe, expect, it } from 'vitest';
+import { validateBoard } from './board'
+import { describe, expect, it } from 'vitest'
 
 describe('validateBoard', () => {
   // validateBoardのテストを書く
   it('盤面の縦の長さが不正な場合、エラーが返ること', () => {
     // 1*9の盤面
-    const board = [
-      [], [], [], [], [], [], [], [], [], []
-    ]
+    const board = [[], [], [], [], [], [], [], [], [], []]
     const result = validateBoard(board)
     expect(result.ok).toBe(false)
     expect(result.message).toBe('盤面の縦の長さが不正です。')
@@ -28,5 +26,5 @@ describe('validateBoard', () => {
     const result = validateBoard(board)
     expect(result.ok).toBe(false)
     expect(result.message).toBe('盤面の横の長さが不正です。')
-  });
+  })
 })

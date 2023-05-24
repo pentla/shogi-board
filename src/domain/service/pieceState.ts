@@ -1,4 +1,4 @@
-import { Piece, PieceState } from '.'
+import { Piece, PieceState } from '../entity'
 
 export const firstPlayerPieceState = (piece: Piece): PieceState => ({
   piece,

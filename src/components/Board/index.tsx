@@ -3,7 +3,7 @@ import BoardImage from '@/assets/img/sg_ban.jpg'
 import { CapturedPieceBoard } from './CapturedPieceBoard'
 import { MainBoard } from './MainBoard'
 import { TurnText } from './TurnText'
-import { useShogiGame } from './useShogiGame'
+import { useShogiGame } from '../../hooks/useShogiGame'
 
 export const Board: React.FC = () => {
   const {

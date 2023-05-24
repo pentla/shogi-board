@@ -1,5 +1,5 @@
-import { getPiece } from './getPiece';
-import { describe, expect, it } from 'vitest';
+import { getPiece } from './getPiece'
+import { describe, expect, it } from 'vitest'
 
 describe('getPiece', () => {
   it('歩の駒が取得できること', () => {

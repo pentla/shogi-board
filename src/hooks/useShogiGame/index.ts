@@ -1,4 +1,4 @@
-import { CapturedState, CellState, Game, Board, Turn } from '@/domain'
+import { CapturedState, CellState, Game, Board, Turn } from '@/domain/entity'
 import { initGame } from '@/usecase/init'
 import { selectCapturedPiece } from '@/usecase/selectCapturedPiece'
 import { selectCell } from '@/usecase/selectCell'
@@ -55,6 +55,7 @@ export const useShogiGame = () => {
     [
       board,
       turn,
+      movablePositions,
       selectedPiece,
       selectedCapturedPiece,
       firstPlayerCapturedPieces,

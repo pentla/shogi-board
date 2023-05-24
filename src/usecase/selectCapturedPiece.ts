@@ -1,4 +1,4 @@
-import { CapturedState, Game } from '@/domain'
+import { CapturedState, Game } from '@/domain/entity'
 import { clearSelectedPiece } from './clearSelectedPiece'
 
 type Props = {

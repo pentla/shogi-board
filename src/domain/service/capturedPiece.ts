@@ -1,4 +1,4 @@
-import { CapturedState, PieceKind } from '.'
+import { CapturedState, PieceKind } from '../entity'
 
 type RemoveCapturedPieceProps = {
   state: CapturedState

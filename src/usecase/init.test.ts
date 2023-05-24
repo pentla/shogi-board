@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { initGame, initBoardPosition } from './init'
-import { getPiece } from '@/domain/getPiece'
+import { getPiece } from '@/domain/service/getPiece'
 
 describe('initGameのテスト', () => {
   it('初期盤面が正しく生成されること', () => {

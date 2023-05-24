@@ -1,4 +1,4 @@
-import { Board, CellState, CapturedState, Turn } from '.'
+import { Board, CellState, CapturedState, Turn } from '../entity'
 
 type ValidateError = {
   ok: boolean
@@ -82,7 +82,6 @@ export const moveCell = ({
   if (!sourceCell.pieceState) {
     throw new Error('sourceCell.pieceState is null. 選択されたセルに駒がありません。')
   }
-  console.log(destinationX, destinationY)
   let changePromote = false
   if (!sourceCell.pieceState.isPromoted) {
     if ((turn === 1 && destinationY <= 2) || (turn === 2 && destinationY >= 6)) {

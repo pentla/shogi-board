@@ -1,11 +1,11 @@
-import { secondPlayerPieceState, firstPlayerPieceState } from '@/domain/pieceState'
-import { CellState, Game } from '@/domain'
-import { moveCell, putCapturedCell } from '@/domain/board'
+import { secondPlayerPieceState, firstPlayerPieceState } from '@/domain/service/pieceState'
+import { CellState, Game } from '@/domain/entity'
+import { moveCell, putCapturedCell } from '@/domain/service/board'
 import { endTurn } from './endTurn'
-import { pushCapturedPiece, removeCapturedPiece } from '@/domain/capturedPiece'
+import { pushCapturedPiece, removeCapturedPiece } from '@/domain/service/capturedPiece'
 import { clearSelectedPiece } from './clearSelectedPiece'
-import { getMovableCoordinates } from '@/domain/movableRule'
-import { isMovable } from '@/domain/coordinates'
+import { getMovableCoordinates } from '@/domain/service/movableRule'
+import { isMovable } from '@/domain/valueObject/coordinates'
 
 type SelectPieceProps = {
   cell: CellState

@@ -1,7 +1,7 @@
-import { Board, Coordinate, Game, Turn } from '.'
+import { Board, Coordinate, Game, Turn } from '../entity'
 import * as move from './move'
 
-type GetMovablePositionsProps = {
+type GetMovableCoordinatesProps = {
   board: Board
   selectedPiece: Game['selectedPiece']
 }
@@ -13,9 +13,9 @@ type GetMovablePositionsProps = {
 export const getMovableCoordinates = ({
   board,
   selectedPiece,
-}: GetMovablePositionsProps): Coordinate[] => {
+}: GetMovableCoordinatesProps): Coordinate[] => {
   if (!selectedPiece?.pieceState) {
-    throw new Error('selectedPiece is null')
+    throw new Error('selectedPiece must not be null')
   }
   const { pieceState, x, y } = selectedPiece
   let coordinates: Coordinate[] = []

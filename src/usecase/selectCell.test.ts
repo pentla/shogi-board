@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 import { selectCell } from './selectCell'
 import { initGame } from './init'
-import { CellState } from '@/domain'
-import { getPiece } from '@/domain/getPiece'
+import { CellState } from '@/domain/entity'
+import { getPiece } from '@/domain/service/getPiece'
 
 const generateMockGame = () => {
   return {

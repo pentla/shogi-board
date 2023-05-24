@@ -1,5 +1,5 @@
 import React from 'react'
-import { CellState, Game, Turn } from '@/domain'
+import { CellState, Game, Turn } from '@/domain/entity'
 import { Cell } from './Cell'
 
 type Props = {

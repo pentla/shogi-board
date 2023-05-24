@@ -1,7 +1,7 @@
-import type { Game, Board } from '@/domain'
-import { validateBoard, getEmptyBoard } from '@/domain/board'
-import { getPiece } from '@/domain/getPiece'
-import { firstPlayerPieceState, secondPlayerPieceState } from '@/domain/pieceState'
+import type { Game, Board } from '@/domain/entity'
+import { validateBoard, getEmptyBoard } from '@/domain/service/board'
+import { getPiece } from '@/domain/service/getPiece'
+import { firstPlayerPieceState, secondPlayerPieceState } from '@/domain/service/pieceState'
 
 /* ゲーム開始時、またはリセット時に呼び出す */
 export const initGame = (initialBoard?: Board): Game => {

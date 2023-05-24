@@ -1,4 +1,4 @@
-import { Turn } from "."
+import { Turn } from '../entity'
 
 export const changeTurn = (turn: Turn): Turn => {
   if (turn === 1) return 2

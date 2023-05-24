@@ -1,4 +1,4 @@
-import { CapturedState } from '@/domain'
+import { CapturedState } from '@/domain/entity'
 import React, { useCallback } from 'react'
 
 type Props = {
@@ -16,7 +16,7 @@ export const CapturedCell: React.FC<Props> = ({ state, isTurn, isSelected, style
     onClick(state)
   }, [state, onClick])
   return (
-    <div style={{ ...style }} className="box-border absolute border-0" onClick={clickEvent}>
+    <div style={{ ...style }} className='box-border absolute border-0' onClick={clickEvent}>
       {pieceState && (
         <img
           className={`
@@ -25,7 +25,7 @@ export const CapturedCell: React.FC<Props> = ({ state, isTurn, isSelected, style
           `}
           src={pieceState.piece.image}
           style={{ transform: isSecondPlayerOwner ? 'rotate(180deg)' : '' }}
-          alt="持ち駒の画像"
+          alt='持ち駒の画像'
         />
       )}
     </div>

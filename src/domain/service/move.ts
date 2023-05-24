@@ -1,4 +1,4 @@
-import { Board, Coordinate, Turn } from '.'
+import { Board, Coordinate, Turn } from '../entity'
 
 // 前に進む
 export const moveFront = (turn: Turn, { x, y }: Coordinate): Coordinate[] => {

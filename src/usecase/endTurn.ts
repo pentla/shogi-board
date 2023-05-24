@@ -1,5 +1,5 @@
-import { Turn } from '@/domain'
-import { changeTurn } from '@/domain/turn'
+import { Turn } from '@/domain/entity'
+import { changeTurn } from '@/domain/service/turn'
 
 type Props = {
   turn: Turn

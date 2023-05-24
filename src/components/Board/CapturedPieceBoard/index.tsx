@@ -1,5 +1,5 @@
 import React, { CSSProperties, useCallback } from 'react'
-import { Game, CapturedState } from '@/domain'
+import { Game, CapturedState } from '@/domain/entity'
 import { CapturedCell } from './CapturedCell'
 
 type Props = {
@@ -25,7 +25,7 @@ export const CapturedPieceBoard: React.FC<Props> = ({
   )
 
   return (
-    <div className="absolute shadow" style={{ width: 120, height: 120, ...style }}>
+    <div className='absolute shadow' style={{ width: 120, height: 120, ...style }}>
       {pieces.map((piece, i) => (
         <CapturedCell
           key={i}

@@ -1,4 +1,4 @@
-import { Game } from '@/domain'
+import { Game } from '@/domain/entity'
 
 type ClearSelectedProps = {
   updateSelectedPiece: (piece: Game['selectedPiece']) => void

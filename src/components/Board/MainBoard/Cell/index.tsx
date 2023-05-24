@@ -1,4 +1,4 @@
-import { CellState } from '@/domain'
+import { CellState } from '@/domain/entity'
 import React, { useCallback } from 'react'
 
 type Props = {
